@@ -1,0 +1,26 @@
+body {
+    margin: 0;
+    background-image: url(/assets/images/plane-bg.webp);
+    background-color: #606870;
+    background-position: center center;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-attachment: scroll;    
+    height: 100vh;
+}
+
+#app {
+    position: relative;
+}
+
+#app::after {
+    position: absolute;
+    top: 0;
+    left: 0;
+    // z-index: 1;
+    content: '';
+    width: 100%;
+    height: 100vh;
+    opacity: 0.83;
+    background-color: #0e172f;
+}
