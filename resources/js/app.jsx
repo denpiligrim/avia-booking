@@ -17,7 +17,7 @@ import Privacy from './Pages/Privacy';
 const newTheme = createTheme({
   palette: {
     primary: {
-      main: '#60a47c',
+      main: '#3483fa',
     }
   },
   typography: {
@@ -42,7 +42,7 @@ const newTheme = createTheme({
       styleOverrides: {
         root: {
           "&:hover .MuiOutlinedInput-notchedOutline": {
-            borderColor: '#60a47c'
+            borderColor: '#3483fa'
           },
           "& input::placeholder": {
             verticalAlign: 'middle'
@@ -60,21 +60,19 @@ ReactDOM.createRoot(document.getElementById('app')).render(
       <CssBaseline />
       <Header />
       <Grid container justifyContent={'center'} alignItems={'center'}>
-        <Grid xs={12} sx={{
-            position: 'absolute',
-            zIndex: '4',
-            top: 10,
-            p: 2
+        <Grid item xs={12} sx={{
+            p: 2,
+            textAlign: 'center'
         }}>
             <img src="/assets/images/logo.svg" alt="Logo" style={{ width: '100%', maxWidth: 220 }} />
         </Grid>
-        {/* <Grid item xs={12} md={10} minHeight={500}>
+        <Grid item xs={12}>
           <Routes>
             <Route path='/' element={<Main />} />
-            <Route path='/privacy-policy' element={<Privacy />} />
-            <Route path="*" element={<Error404 />} />
+            {/* <Route path='/privacy-policy' element={<Privacy />} />
+            <Route path="*" element={<Error404 />} /> */}
           </Routes>
-        </Grid> */}
+        </Grid>
       </Grid>
       <Footer />
       {/* <Notification /> */}

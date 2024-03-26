@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\VipZalController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -12,6 +13,8 @@ use Illuminate\Support\Facades\Route;
 | be assigned to the "web" middleware group. Make something great!
 |
 */
+
+Route::get('/api/search', [VipZalController::class, 'search']);
 
 Route::view('/{path}', 'welcome', [])
     ->where('path', '.*');
