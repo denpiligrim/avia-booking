@@ -13,6 +13,7 @@ import Footer from './Components/Footer';
 // import ScrollToTop from './Components/ScrollToTop';
 // import ToTopBtn from './Components/ToTopBtn';
 import Privacy from './Pages/Privacy';
+import Booking from './Pages/Booking';
 
 const newTheme = createTheme({
   palette: {
@@ -22,15 +23,15 @@ const newTheme = createTheme({
   },
   typography: {
     fontFamily: [
-      "FuturaPTDemi",
+      "Montserrat",
       'sans-serif'
     ].join(','),
     body1: {
-      fontFamily: 'Helvetica, sans-serif',
+      fontFamily: 'Montserrat, sans-serif',
       letterSpacing: '0.5px'
     },
     body2: {
-      fontFamily: 'Helvetica, sans-serif',
+      fontFamily: 'Montserrat, sans-serif',
       letterSpacing: '0.5px'
     }
   },
@@ -60,19 +61,12 @@ ReactDOM.createRoot(document.getElementById('app')).render(
       <CssBaseline />
       <Header />
       <Grid container justifyContent={'center'} alignItems={'center'}>
-        <Grid item xs={12} sx={{
-            p: 2,
-            textAlign: 'center'
-        }}>
-            <img src="/assets/images/logo.svg" alt="Logo" style={{ width: '100%', maxWidth: 220 }} />
-        </Grid>
-        <Grid item xs={12}>
-          <Routes>
-            <Route path='/' element={<Main />} />
-            {/* <Route path='/privacy-policy' element={<Privacy />} />
+        <Routes>
+          <Route path='/' element={<Main />} />
+          <Route path='/booking' element={<Booking />} />
+          {/* <Route path='/privacy-policy' element={<Privacy />} />
             <Route path="*" element={<Error404 />} /> */}
-          </Routes>
-        </Grid>
+        </Routes>
       </Grid>
       <Footer />
       {/* <Notification /> */}

@@ -2,14 +2,17 @@ import * as React from 'react';
 import parse from 'autosuggest-highlight/parse';
 import match from 'autosuggest-highlight/match';
 import { Autocomplete, Box, CircularProgress, FormControl, Grid, TextField, Typography, debounce } from '@mui/material';
-import KingBedIcon from '@mui/icons-material/KingBed';
-import SearchIcon from '@mui/icons-material/Search';
-import { Link as RouterLink } from 'react-router-dom';
+import AirplanemodeActiveIcon from '@mui/icons-material/AirplanemodeActive';
 import axios from 'axios';
+import { observer } from 'mobx-react-lite';
+import appState from '../store/appState';
 
 const autocompleteService = { current: null };
 
-export default function TerminalsSearch() {
+const TerminalsSearch = observer(() => {
+
+    const [store] = React.useState(appState);
+
     const [value, setValue] = React.useState(null);
     const [inputValue, setInputValue] = React.useState('');
     const [loading, setLoading] = React.useState(false);
@@ -34,7 +37,7 @@ export default function TerminalsSearch() {
         () =>
             debounce((request, callback) => {
                 setLoading(true);
-                autocompleteService.current.get(import.meta.env.VITE_APP_BASE_URL + '/api/search?term=' + request.input)
+                autocompleteService.current.get('/api/search?term=' + request.input)
                     .then(res => {
                         let json = res.data.result;
                         callback(json);
@@ -116,10 +119,11 @@ export default function TerminalsSearch() {
             filterSelectedOptions
             value={value}
             noOptionsText="Нет результатов"
-            popupIcon={loading ? <CircularProgress color="primary" size={20} /> : <SearchIcon sx={{ color: 'primary.main', transform: 'none' }} />}
+            popupIcon={loading ? <CircularProgress color="primary" size={20} /> : <AirplanemodeActiveIcon sx={{ color: 'primary.main', transform: 'none' }} />}
             onChange={(event, newValue) => {
                 setOptions(newValue ? [newValue, ...options] : options);
                 setValue(newValue);
+                store.changeIata(newValue.iata);
             }}
             onInputChange={(event, newInputValue) => {
                 setInputValue(newInputValue);
@@ -161,30 +165,31 @@ export default function TerminalsSearch() {
 
                 return (
                     <li {...props}>
-                            <Grid container alignItems="center">
-                                <Grid item sx={{ display: 'flex', width: 60, pr: 1 }}>
-                                    <Typography variant="h6" color="primary.main">
-                                        {option.iata}
-                                    </Typography>
-                                </Grid>
-                                <Grid item sx={{ width: 'calc(100% - 60px)', wordWrap: 'break-word' }}>
-                                    {parts.map((part, index) => (
-                                        <Box
-                                            key={index}
-                                            component="span"
-                                            sx={{ fontWeight: part.highlight ? 'bold' : 'regular', color: '#212529' }}
-                                        >
-                                            {part.text}
-                                        </Box>
-                                    ))}
-                                    <Typography variant="body2" color="text.secondary">
-                                        {option.label}
-                                    </Typography>
-                                </Grid>
+                        <Grid container alignItems="center">
+                            <Grid item sx={{ display: 'flex', width: 60, pr: 1 }}>
+                                <Typography variant="button" color="primary.main">
+                                    {option.iata}
+                                </Typography>
                             </Grid>
+                            <Grid item sx={{ width: 'calc(100% - 60px)', wordWrap: 'break-word' }}>
+                                {parts.map((part, index) => (
+                                    <Box
+                                        key={index}
+                                        component="span"
+                                        sx={{ fontWeight: part.highlight ? 'bold' : 'regular', color: '#212529' }}
+                                    >
+                                        {part.text}
+                                    </Box>
+                                ))}
+                                <Typography variant="body2" color="text.secondary">
+                                    {option.label}
+                                </Typography>
+                            </Grid>
+                        </Grid>
                     </li>
                 );
             }}
         />
     );
-}
+});
+export default TerminalsSearch;

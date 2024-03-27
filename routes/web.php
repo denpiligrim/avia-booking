@@ -15,6 +15,7 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/api/search', [VipZalController::class, 'search']);
+Route::get('/api/services', [VipZalController::class, 'services']);
 
 Route::view('/{path}', 'welcome', [])
     ->where('path', '.*');

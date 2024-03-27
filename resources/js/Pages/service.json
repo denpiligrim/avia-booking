@@ -1,0 +1,223 @@
+{
+    "id": 778,
+    "type": "departure",
+    "name": "VIP-обслуживание",
+    "passengerContactPhoneRequired": false,
+    "contactPhoneOwner": "not_required",
+    "categoryId": "vip-zal",
+    "flightType": "domestic",
+    "ticketClassRequired": 0,
+    "citizenshipRequired": 0,
+    "parkingInfoRequired": 1,
+    "latinNamesRequired": 0,
+    "passportDataRequired": 0,
+    "isAvailableByQrCode": false,
+    "isAvailableByDragonPass": false,
+    "minPossibleTime": 2,
+    "timeToPenalty": 4,
+    "priorityInWidget": 0,
+    "terminal": {
+      "id": 127,
+      "name": "Пулково-1",
+      "label": "Санкт-Петербург Пулково (LED)",
+      "description": "",
+      "airport": {
+        "name": "Пулково",
+        "iata": "LED",
+        "city": {
+          "name": "Санкт-Петербург",
+          "iata": "LED",
+          "country": {
+            "name": "Россия",
+            "code": "RU"
+          },
+          "alternative_naming": null
+        },
+        "alternative_naming": null
+      },
+      "closed_from": null,
+      "closed_to": null,
+      "closed_reason": null,
+      "alternative_naming": null
+    },
+    "priceGroup": {
+      "isPriceDependsByPassengersCount": false,
+      "passengerCategories": [
+        {
+          "urgency_charge": "0.00",
+          "urgency_charge_currency": "RUB",
+          "name": "Младенец",
+          "ages": {
+            "min": 0,
+            "max": 2
+          },
+          "birthDateRequired": true,
+          "price": {
+            "currency": "RUB",
+            "value": 0
+          },
+          "priceBase": {
+            "currency": "RUB",
+            "value": 0
+          }
+        },
+        {
+          "urgency_charge": "3000.00",
+          "urgency_charge_currency": "RUB",
+          "name": "Ребенок",
+          "ages": {
+            "min": 2,
+            "max": 12
+          },
+          "birthDateRequired": true,
+          "price": {
+            "currency": "RUB",
+            "value": 13000
+          },
+          "priceBase": {
+            "currency": "RUB",
+            "value": 13000
+          }
+        },
+        {
+          "urgency_charge": "2500.00",
+          "urgency_charge_currency": "RUB",
+          "name": "Взрослый",
+          "ages": {
+            "min": 12,
+            "max": 150
+          },
+          "birthDateRequired": false,
+          "price": {
+            "currency": "RUB",
+            "value": 26000
+          },
+          "priceBase": {
+            "currency": "RUB",
+            "value": 26000
+          }
+        }
+      ],
+      "attendantCategories": [
+        {
+          "name": "Все",
+          "ages": {
+            "min": 1,
+            "max": 150
+          },
+          "birthDateRequired": false,
+          "price": {
+            "currency": "RUB",
+            "value": 0
+          }
+        }
+      ],
+      "additionalServices": [
+        {
+          "name": "«Ломоносов» (до 8 человек)",
+          "type": "room",
+          "typeLabel": "Комната переговоров",
+          "billing": "hour",
+          "capacity": 100,
+          "description": "Помещение для проведения деловых встреч со столом, креслами, необходимой оргтехникой и ТВ.",
+          "bookingDescription": "",
+          "price": {
+            "currency": "RUB",
+            "value": 8500
+          }
+        },
+        {
+          "name": "«Менделеев» (до 6 человек)",
+          "type": "room",
+          "typeLabel": "Комната переговоров",
+          "billing": "hour",
+          "capacity": 99,
+          "description": "Помещение для проведения деловых встреч со столом, креслами, необходимой оргтехникой и ТВ.",
+          "bookingDescription": "",
+          "price": {
+            "currency": "RUB",
+            "value": 6500
+          }
+        },
+        {
+          "name": "«Витте» (до 6 человек)",
+          "type": "room",
+          "typeLabel": "Комната переговоров",
+          "billing": "hour",
+          "capacity": 98,
+          "description": "Помещение для проведения деловых встреч со столом, креслами, необходимой оргтехникой и ТВ.",
+          "bookingDescription": "",
+          "price": {
+            "currency": "RUB",
+            "value": 6500
+          }
+        },
+        {
+          "name": "«Пушкин» (до 8 человек)",
+          "type": "vip_apartment",
+          "typeLabel": "ВИП-апартаменты",
+          "billing": "hour",
+          "capacity": 100,
+          "description": "Комфортабельные комнаты с диваном, столом, креслами, душем и ТВ для индивидуального отдыха в приватной обстановке.",
+          "bookingDescription": "",
+          "price": {
+            "currency": "RUB",
+            "value": 12500
+          }
+        },
+        {
+          "name": "«Достоевский» (до 6 человек)",
+          "type": "vip_apartment",
+          "typeLabel": "ВИП-апартаменты",
+          "billing": "hour",
+          "capacity": 99,
+          "description": "Комфортабельные комнаты с диваном, столом, креслами, душем и ТВ для индивидуального отдыха в приватной обстановке.",
+          "bookingDescription": "",
+          "price": {
+            "currency": "RUB",
+            "value": 9500
+          }
+        },
+        {
+          "name": "«Репин» (до 6 человек)",
+          "type": "vip_apartment",
+          "typeLabel": "ВИП-апартаменты",
+          "billing": "hour",
+          "capacity": 98,
+          "description": "Комфортабельные комнаты с диваном, столом, креслами, душем и ТВ для индивидуального отдыха в приватной обстановке.",
+          "bookingDescription": "",
+          "price": {
+            "currency": "RUB",
+            "value": 9500
+          }
+        }
+      ],
+      "urgency": {
+        "charges": [],
+        "urgency": [
+          {
+            "urgency_type_label": "Время до исполнения заказа",
+            "total_time": 25
+          }
+        ]
+      }
+    },
+    "interiorPhotos": [
+      {
+        "id": 174,
+        "type": "image",
+        "main": "imgonline-com-ua-Resize-OYlstMnLVb1.jpg",
+        "thumb": "https://sandbox.vip-zal.ru/uploads/gallery/service/J6yp26VmbPjut-7kdpITqJuXxsv_YWxI.jpg",
+        "url": "https://sandbox.vip-zal.ru/uploads/gallery/service/J6yp26VmbPjut-7kdpITqJuXxsv_YWxI.jpg",
+        "sort": 1,
+        "alt": {
+          "ru": null,
+          "en": null
+        }
+      }
+    ],
+    "closed_from": null,
+    "closed_to": null,
+    "closed_reason": null,
+    "is_patronymic_required": false
+  }
