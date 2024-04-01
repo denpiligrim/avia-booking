@@ -16,15 +16,21 @@ const Booking = observer(() => {
     const [progress, setProgress] = useState(true);
 
     const [services, setServices] = useState([]);
-    const [queryParameters] = useSearchParams();
+    const [queryParameters, setQueryParameters] = useSearchParams();
 
     const setCity = (val) => {
         store.changeSearchVal(val);
         store.changeIata(val.iata);
-      }
+    }
 
     useEffect(() => {
         setProgress(true);
+        if (store.iataVal && store.directionVal) {
+            setQueryParameters({iata: store.iataVal, direction: store.directionVal});
+        } else {
+            store.changeIata(queryParameters.get('iata') || null);
+            store.changeDirection(queryParameters.get('direction') || null);
+        }
         let iata = store.iataVal || queryParameters.get('iata');
         let direction = store.directionVal || queryParameters.get('direction');
         axios.get(`/api/services?iata=${iata}&direction=${direction}`)
@@ -39,6 +45,9 @@ const Booking = observer(() => {
                             acc[obj.name].push(obj);
                             return acc;
                         }, {});
+                        if (!store.searchVal) {
+                            store.changeSearchVal(data.result[0]?.terminal?.airport?.city || null);
+                        }
                         setServices(Object.entries(groupedObjects));
                     }
                     setProgress(false);
@@ -48,8 +57,9 @@ const Booking = observer(() => {
                 console.log(err);
             });
     }, [store.iataVal, store.directionVal])
+
     return (
-        <Grid item xs={12} sx={{ textAlign: 'center' }}>            
+        <Grid item xs={12} sx={{ textAlign: 'center' }}>
             <Grid container>
                 <Grid item xs={12} md={4}>
                     <TerminalsSearch />
@@ -103,38 +113,38 @@ const Booking = observer(() => {
                     </Box>
                 </Grid>
                 <Grid item xs={12} md={8}>
-                {progress ? (<LinearProgress color="primary" sx={{ mx: 1 }} />) : (
-                    <>
-                    {services.length > 0 ? services.map((el, i) => (
-                        <React.Fragment key={'razdel' + i}>
-                            <Typography component="h3" variant="h4" color={'white'}>
-                                {el[0] === "VIP-обслуживание" ? "VIP-зал" : el[0]}
-                            </Typography>
-                            {el[1].map((el, i) => (
-                                <Card key={'item' + i} sx={{ display: 'flex', m: 1 }}>
-                                    <Box sx={{ display: 'flex', flexDirection: 'row' }}>
-                                        {el.interiorPhotos.length > 0 && (
-                                            <CardMedia
-                                                component="img"
-                                                sx={{ width: 151 }}
-                                                image={el.interiorPhotos[0]?.url?.replace('sandbox.', '') || ''}
-                                                alt={el.interiorPhotos[0]?.alt?.ru || "Image"}
-                                            />
-                                        )}
-                                        <CardContent>
-                                            <Typography component="div" variant="h5">
-                                                {el.name}
-                                            </Typography>
-                                            <Typography variant="subtitle1" color="text.secondary" component="div">
-                                                {el.priceGroup?.passengerCategories[2]?.price ? el.priceGroup?.passengerCategories[2].price?.value?.toString().replace(/(\d)(?=(\d{3})+(\D|$))/g, '$1 ') + ' ₽' : ''}
-                                            </Typography>
-                                        </CardContent>
-                                    </Box>
-                                </Card>
-                            ))}
-                        </React.Fragment>
-                    )) : ( <Typography component="h3" variant="h4" color={'white'}>Ничего не найдено!</Typography> )}
-                    </>
+                    {progress ? (<LinearProgress color="primary" sx={{ mx: 1 }} />) : (
+                        <>
+                            {services.length > 0 ? services.map((el, i) => (
+                                <React.Fragment key={'razdel' + i}>
+                                    <Typography component="h3" variant="h4" color={'white'}>
+                                        {el[0] === "VIP-обслуживание" ? "VIP-зал" : el[0]}
+                                    </Typography>
+                                    {el[1].map((el, i) => (
+                                        <Card key={'item' + i} sx={{ display: 'flex', m: 1 }}>
+                                            <Box sx={{ display: 'flex', flexDirection: 'row' }}>
+                                                {el.interiorPhotos.length > 0 && (
+                                                    <CardMedia
+                                                        component="img"
+                                                        sx={{ width: 151 }}
+                                                        image={el.interiorPhotos[0]?.url?.replace('sandbox.', '') || ''}
+                                                        alt={el.interiorPhotos[0]?.alt?.ru || "Image"}
+                                                    />
+                                                )}
+                                                <CardContent>
+                                                    <Typography component="div" variant="h5">
+                                                        {el.name}
+                                                    </Typography>
+                                                    <Typography variant="subtitle1" color="text.secondary" component="div">
+                                                        {el.priceGroup?.passengerCategories[2]?.price ? el.priceGroup?.passengerCategories[2].price?.value?.toString().replace(/(\d)(?=(\d{3})+(\D|$))/g, '$1 ') + ' ₽' : ''}
+                                                    </Typography>
+                                                </CardContent>
+                                            </Box>
+                                        </Card>
+                                    ))}
+                                </React.Fragment>
+                            )) : (<Typography component="h3" variant="h4" color={'white'}>Ничего не найдено!</Typography>)}
+                        </>
                     )}
                 </Grid>
             </Grid>
