@@ -6,14 +6,14 @@ import AirplanemodeActiveIcon from '@mui/icons-material/AirplanemodeActive';
 import axios from 'axios';
 import { observer } from 'mobx-react-lite';
 import appState from '../store/appState';
+import { useState } from 'react';
 
 const autocompleteService = { current: null };
 
 const TerminalsSearch = observer(() => {
 
-    const [store] = React.useState(appState);
+    const [store] = useState(appState);
 
-    const [value, setValue] = React.useState(null);
     const [inputValue, setInputValue] = React.useState('');
     const [loading, setLoading] = React.useState(false);
     const [options, setOptions] = React.useState([]);
@@ -63,7 +63,7 @@ const TerminalsSearch = observer(() => {
         }
 
         if (inputValue === '') {
-            setOptions(value ? [value] : []);
+            setOptions(store.searchVal ? [store.searchVal] : []);
             return undefined;
         }
 
@@ -71,8 +71,8 @@ const TerminalsSearch = observer(() => {
             if (active) {
                 let newOptions = [];
 
-                if (value) {
-                    newOptions = [value];
+                if (store.searchVal) {
+                    newOptions = [store.searchVal];
                 }
 
                 if (results) {
@@ -86,7 +86,7 @@ const TerminalsSearch = observer(() => {
         return () => {
             active = false;
         };
-    }, [value, inputValue, fetch]);
+    }, [store.searchVal, inputValue, fetch]);
 
     return (
         <Autocomplete
@@ -117,12 +117,12 @@ const TerminalsSearch = observer(() => {
             autoComplete
             includeInputInList
             filterSelectedOptions
-            value={value}
+            value={store.searchVal}
             noOptionsText="Нет результатов"
             popupIcon={loading ? <CircularProgress color="primary" size={20} /> : <AirplanemodeActiveIcon sx={{ color: 'primary.main', transform: 'none' }} />}
             onChange={(event, newValue) => {
                 setOptions(newValue ? [newValue, ...options] : options);
-                setValue(newValue);
+                store.changeSearchVal(newValue);
                 store.changeIata(newValue.iata);
             }}
             onInputChange={(event, newInputValue) => {
@@ -135,6 +135,9 @@ const TerminalsSearch = observer(() => {
                         id="search-box"
                         sx={{
                             background: 'white',
+                            "& input": {
+                                pt: '4px'
+                            },
                             width: {
                                 xs: '100%',
                                 sm: '100%'
