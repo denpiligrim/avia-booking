@@ -6,6 +6,9 @@ import { useSearchParams } from 'react-router-dom';
 import TerminalsSearch from '../Components/TerminalsSearch';
 import FlightLandIcon from '@mui/icons-material/FlightLand';
 import FlightTakeoffIcon from '@mui/icons-material/FlightTakeoff';
+import PublicIcon from '@mui/icons-material/Public';
+import HomeIcon from '@mui/icons-material/Home';
+import ManIcon from '@mui/icons-material/Man';
 import { observer } from 'mobx-react-lite';
 import appState from '../store/appState';
 
@@ -26,7 +29,7 @@ const Booking = observer(() => {
     useEffect(() => {
         setProgress(true);
         if (store.iataVal && store.directionVal) {
-            setQueryParameters({iata: store.iataVal, direction: store.directionVal});
+            setQueryParameters({ iata: store.iataVal, direction: store.directionVal });
         } else {
             store.changeIata(queryParameters.get('iata') || null);
             store.changeDirection(queryParameters.get('direction') || null);
@@ -59,9 +62,9 @@ const Booking = observer(() => {
     }, [store.iataVal, store.directionVal])
 
     return (
-        <Grid item xs={12} sx={{ textAlign: 'center' }}>
+        <Grid item xs={12}>
             <Grid container>
-                <Grid item xs={12} md={4}>
+                <Grid item xs={12} md={4} textAlign={'center'}>
                     <TerminalsSearch />
                     <p style={{ margin: 0, color: 'white' }}>
                         <Typography component="span" variant="caption" sx={{
@@ -117,11 +120,11 @@ const Booking = observer(() => {
                         <>
                             {services.length > 0 ? services.map((el, i) => (
                                 <React.Fragment key={'razdel' + i}>
-                                    <Typography component="h3" variant="h4" color={'white'}>
+                                    <Typography component="h3" variant="h4" color={'white'} mt={i !== 0 ? 5 : 0}>
                                         {el[0] === "VIP-обслуживание" ? "VIP-зал" : el[0]}
                                     </Typography>
                                     {el[1].map((el, i) => (
-                                        <Card key={'item' + i} sx={{ display: 'flex', m: 1 }}>
+                                        <Card key={'item' + el.id} sx={{ m: 1 }}>
                                             <Box sx={{ display: 'flex', flexDirection: 'row' }}>
                                                 {el.interiorPhotos.length > 0 && (
                                                     <CardMedia
@@ -131,12 +134,35 @@ const Booking = observer(() => {
                                                         alt={el.interiorPhotos[0]?.alt?.ru || "Image"}
                                                     />
                                                 )}
-                                                <CardContent>
+                                                <CardContent sx={{ textAlign: 'left' }}>
                                                     <Typography component="div" variant="h5">
                                                         {el.name}
                                                     </Typography>
-                                                    <Typography variant="subtitle1" color="text.secondary" component="div">
-                                                        {el.priceGroup?.passengerCategories[2]?.price ? el.priceGroup?.passengerCategories[2].price?.value?.toString().replace(/(\d)(?=(\d{3})+(\D|$))/g, '$1 ') + ' ₽' : ''}
+                                                    <Typography component="div" variant="body1" fontWeight={600}>
+                                                        {el.flightType === "domestic" ? (
+                                                        <>
+                                                        <HomeIcon sx={{ verticalAlign: 'sub' }} /> Внутренний рейс, {el.type === "departure" ? "вылет" : el.type === "arrival" ? "прилет" : ""}
+                                                        </>
+                                                        ) : el.flightType === "international" ? (
+                                                        <>
+                                                        <PublicIcon sx={{ verticalAlign: 'sub' }} /> Международный рейс, {el.type === "departure" ? "вылет" : el.type === "arrival" ? "прилет" : ""}
+                                                        </>
+                                                        ) : (
+                                                          <>
+                                                        <PublicIcon sx={{ verticalAlign: 'sub' }} /> <HomeIcon sx={{ verticalAlign: 'sub' }} /> Международный или внутренний рейс, {el.type === "departure" ? "вылет" : el.type === "arrival" ? "прилет" : ""}
+                                                        </>
+                                                        )}
+                                                    </Typography>
+                                                    <Button variant="text" sx={{m: 1}}>Подробнее</Button>
+                                                    <Button variant="contained" sx={{m: 1}}>Заказать</Button>
+                                                </CardContent>
+                                                <CardContent sx={{
+                                                  marginLeft: 'auto',
+                                                  alignItems: 'center',
+                                                  display: 'flex'
+                                                }}>
+                                                    <Typography component="div" variant="h5">
+                                                    {el.priceGroup?.passengerCategories[2]?.price ? (<>{el.priceGroup?.passengerCategories[2].price?.value?.toString().replace(/(\d)(?=(\d{3})+(\D|$))/g, '$1 ') + ' ₽ /'} <ManIcon sx={{ verticalAlign: 'middle' }} /></>) : ''}
                                                     </Typography>
                                                 </CardContent>
                                             </Box>
