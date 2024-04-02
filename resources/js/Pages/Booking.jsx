@@ -1,4 +1,4 @@
-import { Box, Button, ButtonGroup, Card, CardContent, CardMedia, Grid, LinearProgress, Typography } from '@mui/material';
+import { Box, Button, ButtonGroup, Card, CardContent, CardMedia, Checkbox, Grid, IconButton, LinearProgress, List, ListItem, ListItemButton, ListItemIcon, ListItemText, Typography } from '@mui/material';
 import axios from 'axios'
 import React, { useEffect } from 'react'
 import { useState } from 'react';
@@ -25,6 +25,21 @@ const Booking = observer(() => {
         store.changeSearchVal(val);
         store.changeIata(val.iata);
     }
+
+    const [checked, setChecked] = useState([0]);
+
+    const handleToggle = (value) => () => {
+        const currentIndex = checked.indexOf(value);
+        const newChecked = [...checked];
+
+        if (currentIndex === -1) {
+            newChecked.push(value);
+        } else {
+            newChecked.splice(currentIndex, 1);
+        }
+
+        setChecked(newChecked);
+    };
 
     useEffect(() => {
         setProgress(true);
@@ -114,6 +129,43 @@ const Booking = observer(() => {
                             }} onClick={() => store.changeDirection('arrival')}>Прилет</Button>
                         </ButtonGroup>
                     </Box>
+                    <Box sx={{textAlign: 'center'}}>
+                        <List sx={{
+                            width: '90%',
+                            maxWidth: '500px',
+                            marginLeft: 'auto',
+                            marginRight: 'auto',
+                            bgcolor: 'transparent',
+                            color: 'white',
+                            "& span:not(.Mui-checked) .MuiSvgIcon-root": {
+                                fill: 'white'
+                            }
+                        }}>
+                            {[0, 1, 2, 3].map((value) => {
+                                const labelId = `checkbox-list-label-${value}`;
+
+                                return (
+                                    <ListItem
+                                        key={value}
+                                        disablePadding
+                                    >
+                                        <ListItemButton sx={{ pl: 0 }} role={undefined} onClick={handleToggle(value)} dense>
+                                            <ListItemIcon>
+                                                <Checkbox
+                                                    edge="start"
+                                                    checked={checked.indexOf(value) !== -1}
+                                                    tabIndex={-1}
+                                                    disableRipple
+                                                    inputProps={{ 'aria-labelledby': labelId }}
+                                                />
+                                            </ListItemIcon>
+                                            <ListItemText id={labelId} primary={`Line item ${value + 1}`} />
+                                        </ListItemButton>
+                                    </ListItem>
+                                );
+                            })}
+                        </List>
+                    </Box>
                 </Grid>
                 <Grid item xs={12} md={8}>
                     {progress ? (<LinearProgress color="primary" sx={{ mx: 1 }} />) : (
@@ -140,29 +192,29 @@ const Booking = observer(() => {
                                                     </Typography>
                                                     <Typography component="div" variant="body1" fontWeight={600}>
                                                         {el.flightType === "domestic" ? (
-                                                        <>
-                                                        <HomeIcon sx={{ verticalAlign: 'sub' }} /> Внутренний рейс, {el.type === "departure" ? "вылет" : el.type === "arrival" ? "прилет" : ""}
-                                                        </>
+                                                            <>
+                                                                <HomeIcon sx={{ verticalAlign: 'sub' }} /> Внутренний рейс, {el.type === "departure" ? "вылет" : el.type === "arrival" ? "прилет" : ""}
+                                                            </>
                                                         ) : el.flightType === "international" ? (
-                                                        <>
-                                                        <PublicIcon sx={{ verticalAlign: 'sub' }} /> Международный рейс, {el.type === "departure" ? "вылет" : el.type === "arrival" ? "прилет" : ""}
-                                                        </>
+                                                            <>
+                                                                <PublicIcon sx={{ verticalAlign: 'sub' }} /> Международный рейс, {el.type === "departure" ? "вылет" : el.type === "arrival" ? "прилет" : ""}
+                                                            </>
                                                         ) : (
-                                                          <>
-                                                        <PublicIcon sx={{ verticalAlign: 'sub' }} /> <HomeIcon sx={{ verticalAlign: 'sub' }} /> Международный или внутренний рейс, {el.type === "departure" ? "вылет" : el.type === "arrival" ? "прилет" : ""}
-                                                        </>
+                                                            <>
+                                                                <PublicIcon sx={{ verticalAlign: 'sub' }} /> <HomeIcon sx={{ verticalAlign: 'sub' }} /> Международный или внутренний рейс, {el.type === "departure" ? "вылет" : el.type === "arrival" ? "прилет" : ""}
+                                                            </>
                                                         )}
                                                     </Typography>
-                                                    <Button variant="text" sx={{m: 1}}>Подробнее</Button>
-                                                    <Button variant="contained" sx={{m: 1}}>Заказать</Button>
+                                                    <Button variant="text" sx={{ m: 1 }}>Подробнее</Button>
+                                                    <Button variant="contained" sx={{ m: 1 }}>Заказать</Button>
                                                 </CardContent>
                                                 <CardContent sx={{
-                                                  marginLeft: 'auto',
-                                                  alignItems: 'center',
-                                                  display: 'flex'
+                                                    marginLeft: 'auto',
+                                                    alignItems: 'center',
+                                                    display: 'flex'
                                                 }}>
                                                     <Typography component="div" variant="h5">
-                                                    {el.priceGroup?.passengerCategories[2]?.price ? (<>{el.priceGroup?.passengerCategories[2].price?.value?.toString().replace(/(\d)(?=(\d{3})+(\D|$))/g, '$1 ') + ' ₽ /'} <ManIcon sx={{ verticalAlign: 'middle' }} /></>) : ''}
+                                                        {el.priceGroup?.passengerCategories[2]?.price ? (<>{el.priceGroup?.passengerCategories[2].price?.value?.toString().replace(/(\d)(?=(\d{3})+(\D|$))/g, '$1 ') + ' ₽ /'} <ManIcon sx={{ verticalAlign: 'middle' }} /></>) : ''}
                                                     </Typography>
                                                 </CardContent>
                                             </Box>
