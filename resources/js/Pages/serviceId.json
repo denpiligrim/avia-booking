@@ -1,0 +1,409 @@
+{
+  "common": {
+    "name": "VIP-обслуживание",
+    "opening_hours": "Круглосуточно",
+    "hours_to_stay": "",
+    "description": "Отдельное помещение с полным комплексом услуг и комфортабельной зоной ожидания",
+    "detailed_description": "При выходе с трапа самолета пассажир должен подойти к агенту VIP-залa, который ожидает пассажира со специальной табличкой VIP-зала «VIP» или именной, если это оговорено заранее, представиться и передать баажные бирки при наличии зарегистрированного багажа. Далее в сопровождении сотрудника VIP-зала пассажир на автотранспорте для VIP-пассажиров следует в VIP-зал.Время до выдачи багажа пассажир проводит в комфортабельном VIP-зале. Багаж сотрудники получают самостоятельно по багажным квитанциям пассажира и доставляют в VIP-зал или на автостоянку.",
+    "special_conditions": "",
+    "important_information": "",
+    "has_tax_refund": false,
+    "has_smoking_areas": false,
+    "has_animals_allowed": false,
+    "has_disabled_access": true,
+    "interior_photos": [
+      {
+        "id": 174,
+        "type": "image",
+        "main": "imgonline-com-ua-Resize-OYlstMnLVb1.jpg",
+        "thumb": "https://sandbox.vip-zal.ru/uploads/gallery/service/J6yp26VmbPjut-7kdpITqJuXxsv_YWxI.jpg",
+        "url": "https://sandbox.vip-zal.ru/uploads/gallery/service/J6yp26VmbPjut-7kdpITqJuXxsv_YWxI.jpg",
+        "sort": 1,
+        "alt": {
+          "ru": null,
+          "en": null
+        }
+      },
+      {
+        "id": 175,
+        "type": "image",
+        "main": "imgonline-com-ua-Resize-rN8t2mAMiPqjI.jpg",
+        "thumb": "https://sandbox.vip-zal.ru/uploads/gallery/service/DWs2fUm7eX4YeB_Qv2NsQ1ezMxEJ1txz.jpg",
+        "url": "https://sandbox.vip-zal.ru/uploads/gallery/service/DWs2fUm7eX4YeB_Qv2NsQ1ezMxEJ1txz.jpg",
+        "sort": 2,
+        "alt": {
+          "ru": null,
+          "en": null
+        }
+      },
+      {
+        "id": 176,
+        "type": "image",
+        "main": "imgonline-com-ua-Resize-478dP7mXdnbsxO0.jpg",
+        "thumb": "https://sandbox.vip-zal.ru/uploads/gallery/service/RblYkxqswCPKAySMnVgcizrHPwQBGK67.jpg",
+        "url": "https://sandbox.vip-zal.ru/uploads/gallery/service/RblYkxqswCPKAySMnVgcizrHPwQBGK67.jpg",
+        "sort": 3,
+        "alt": {
+          "ru": null,
+          "en": null
+        }
+      },
+      {
+        "id": 177,
+        "type": "image",
+        "main": "imgonline-com-ua-Resize-2pJwNZhp3kMBqujA.jpg",
+        "thumb": "https://sandbox.vip-zal.ru/uploads/gallery/service/XVX22Kl_eScja2hU9cbAMgpG9mz-JspO.jpg",
+        "url": "https://sandbox.vip-zal.ru/uploads/gallery/service/XVX22Kl_eScja2hU9cbAMgpG9mz-JspO.jpg",
+        "sort": 4,
+        "alt": {
+          "ru": null,
+          "en": null
+        }
+      },
+      {
+        "id": 178,
+        "type": "image",
+        "main": "imgonline-com-ua-Resize-tX6FOLjRwr.jpg",
+        "thumb": "https://sandbox.vip-zal.ru/uploads/gallery/service/C8vi_UO7mJkWKsCpWdWom4oDDl0Oe13e.jpg",
+        "url": "https://sandbox.vip-zal.ru/uploads/gallery/service/C8vi_UO7mJkWKsCpWdWom4oDDl0Oe13e.jpg",
+        "sort": 5,
+        "alt": {
+          "ru": null,
+          "en": null
+        }
+      },
+      {
+        "id": 179,
+        "type": "image",
+        "main": "imgonline-com-ua-Resize-dLpsT24FjYkY.jpg",
+        "thumb": "https://sandbox.vip-zal.ru/uploads/gallery/service/YuQJrINVicLVy_ohgjPtoUzdDmd3s48_.jpg",
+        "url": "https://sandbox.vip-zal.ru/uploads/gallery/service/YuQJrINVicLVy_ohgjPtoUzdDmd3s48_.jpg",
+        "sort": 6,
+        "alt": {
+          "ru": null,
+          "en": null
+        }
+      },
+      {
+        "id": 180,
+        "type": "image",
+        "main": "imgonline-com-ua-Resize-gH5ROUOp7HbhFM.jpg",
+        "thumb": "https://sandbox.vip-zal.ru/uploads/gallery/service/EgFo7ItQZFK4jc7gVDz6e8DNnyD6cJhA.jpg",
+        "url": "https://sandbox.vip-zal.ru/uploads/gallery/service/EgFo7ItQZFK4jc7gVDz6e8DNnyD6cJhA.jpg",
+        "sort": 7,
+        "alt": {
+          "ru": null,
+          "en": null
+        }
+      }
+    ],
+    "has_urgent_tariff": true,
+    "cancellation_description": "Аннуляция менее чем за 4 часа до обслуживания или неявка на услугу — штраф 100%.",
+    "tariffs_for_children": "Дети до 2 лет — бесплатно. Дети от 2 до 12 лет обслуживаются со скидкой 50% от взрослого тарифа.",
+    "how_to_get_by_car": "К VIP-залу ведет отдельный автомобильный подъезд. Следовать указателям по направлению к реконструированного терминалу «Пулково-1», который расположен слева от нового терминала",
+    "driving_map": [],
+    "is_available_by_qr_code": false,
+    "is_available_by_dragon_pass": false,
+    "closed_from": null,
+    "closed_to": null,
+    "closed_reason": null
+  },
+  "location": {
+    "location_area": "До досмотра",
+    "location": "1-й этаж терминала «Пулково-1», общая зона аэропорта",
+    "how_to_find": "VIP-зал расположен на 1-м этаже реконструированного терминала «Пулково-1». Имеет отдельный вход с возможностью индивидуального подъезда автотранспорта.",
+    "location_map": []
+  },
+  "option_categories": [
+    {
+      "name": "Зал",
+      "type": "lounge",
+      "priority": 0,
+      "description": "",
+      "detailed_description": "",
+      "is_important": true,
+      "options": [
+        {
+          "name": "Доступ в Зал",
+          "availability": 0,
+          "priority": 0,
+          "description": "Комфортабельный зал ожидания",
+          "detailed_description": "",
+          "is_important": true
+        }
+      ]
+    },
+    {
+      "name": "Сопровождение",
+      "type": "escort",
+      "priority": 10,
+      "description": "Персональное сопровождение сотрудником VIP-зала",
+      "detailed_description": "",
+      "is_important": true,
+      "options": [
+        {
+          "name": "Персональное сопровождение",
+          "availability": 0,
+          "priority": 0,
+          "description": "",
+          "detailed_description": "",
+          "is_important": true
+        }
+      ]
+    },
+    {
+      "name": "Еда и вода",
+      "type": "food-and-water",
+      "priority": 20,
+      "description": "",
+      "detailed_description": "",
+      "is_important": true,
+      "options": [
+        {
+          "name": "Ресторан",
+          "availability": 1,
+          "priority": 0,
+          "description": "",
+          "detailed_description": "",
+          "is_important": true
+        },
+        {
+          "name": "Бар",
+          "availability": 1,
+          "priority": 10,
+          "description": "",
+          "detailed_description": "",
+          "is_important": true
+        }
+      ]
+    },
+    {
+      "name": "Багаж",
+      "type": "luggage",
+      "priority": 30,
+      "description": "Получение и доставка багажа в VIP-зал, услуги носильщика",
+      "detailed_description": "",
+      "is_important": true,
+      "options": [
+        {
+          "name": "Помощь с багажом",
+          "availability": 0,
+          "priority": 0,
+          "description": "",
+          "detailed_description": "",
+          "is_important": true
+        }
+      ]
+    },
+    {
+      "name": "Трансфер",
+      "type": "transfer",
+      "priority": 40,
+      "description": "",
+      "detailed_description": "",
+      "is_important": true,
+      "options": [
+        {
+          "name": "Трансфер от борта",
+          "availability": 0,
+          "priority": 0,
+          "description": "Трансфер от самолета с сопровождением",
+          "detailed_description": "",
+          "is_important": true
+        }
+      ]
+    },
+    {
+      "name": "Парковка",
+      "type": "parking",
+      "priority": 50,
+      "description": "",
+      "detailed_description": "",
+      "is_important": true,
+      "options": [
+        {
+          "name": "Парковка",
+          "availability": 0,
+          "priority": 0,
+          "description": "Отдельная парковка",
+          "detailed_description": "",
+          "is_important": true
+        }
+      ]
+    },
+    {
+      "name": "Дети",
+      "type": "children",
+      "priority": 60,
+      "description": "",
+      "detailed_description": "",
+      "is_important": false,
+      "options": [
+        {
+          "name": "Детская игровая комната",
+          "availability": 0,
+          "priority": 0,
+          "description": "",
+          "detailed_description": "",
+          "is_important": false
+        }
+      ]
+    },
+    {
+      "name": "Интернет/TV",
+      "type": "the-internet-and-tv",
+      "priority": 70,
+      "description": "Wi-Fi, cпутниковое TV",
+      "detailed_description": "",
+      "is_important": false,
+      "options": [
+        {
+          "name": "Wi-Fi",
+          "availability": 0,
+          "priority": 0,
+          "description": "",
+          "detailed_description": "",
+          "is_important": false
+        },
+        {
+          "name": "TV",
+          "availability": 0,
+          "priority": 10,
+          "description": "",
+          "detailed_description": "",
+          "is_important": false
+        }
+      ]
+    },
+    {
+      "name": "Пресса",
+      "type": "press",
+      "priority": 80,
+      "description": "",
+      "detailed_description": "",
+      "is_important": false,
+      "options": [
+        {
+          "name": "Газеты и журналы",
+          "availability": 0,
+          "priority": 0,
+          "description": "",
+          "detailed_description": "",
+          "is_important": false
+        }
+      ]
+    },
+    {
+      "name": "Удобства",
+      "type": "comfort",
+      "priority": 90,
+      "description": "",
+      "detailed_description": "",
+      "is_important": false,
+      "options": [
+        {
+          "name": "Информационное табло с рейсами",
+          "availability": 0,
+          "priority": 0,
+          "description": "",
+          "detailed_description": "",
+          "is_important": false
+        },
+        {
+          "name": "Кондиционер",
+          "availability": 0,
+          "priority": 10,
+          "description": "",
+          "detailed_description": "",
+          "is_important": false
+        },
+        {
+          "name": "Индивидуальная комната для отдыха (по предварительному заказу)",
+          "availability": 3,
+          "priority": 20,
+          "description": "",
+          "detailed_description": "",
+          "is_important": false
+        }
+      ]
+    },
+    {
+      "name": "Оргтехника",
+      "type": "office-equipment",
+      "priority": 100,
+      "description": "",
+      "detailed_description": "",
+      "is_important": false,
+      "options": [
+        {
+          "name": "Телефон (городская связь)",
+          "availability": 0,
+          "priority": 0,
+          "description": "",
+          "detailed_description": "",
+          "is_important": false
+        },
+        {
+          "name": "Факс",
+          "availability": 0,
+          "priority": 10,
+          "description": "",
+          "detailed_description": "",
+          "is_important": false
+        },
+        {
+          "name": "Персональный компьютер с выходом в сеть",
+          "availability": 2,
+          "priority": 20,
+          "description": "",
+          "detailed_description": "",
+          "is_important": false
+        },
+        {
+          "name": "Принтер, ксерокс",
+          "availability": 0,
+          "priority": 30,
+          "description": "",
+          "detailed_description": "",
+          "is_important": false
+        }
+      ]
+    },
+    {
+      "name": "Переговоры",
+      "type": "meeting-room",
+      "priority": 110,
+      "description": "",
+      "detailed_description": "",
+      "is_important": false,
+      "options": [
+        {
+          "name": "Комната для переговоров",
+          "availability": 3,
+          "priority": 0,
+          "description": "",
+          "detailed_description": "",
+          "is_important": false
+        }
+      ]
+    },
+    {
+      "name": "Tax free",
+      "type": "tax-free",
+      "priority": 150,
+      "description": "Собственный магазин Duty Free",
+      "detailed_description": "",
+      "is_important": false,
+      "options": [
+        {
+          "name": "Посещение магазина беспошлинной торговли",
+          "availability": 0,
+          "priority": 0,
+          "description": "",
+          "detailed_description": "",
+          "is_important": false
+        }
+      ]
+    }
+  ]
+}

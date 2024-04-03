@@ -70,4 +70,22 @@ class VipZalController extends Controller
             return $this->apiError($response->json());
         }
     }
+    
+    public function service(Request $request)
+    {
+        $id = $request->input('id');
+        $response = Http::withToken($this->token)
+        ->acceptJson()
+        ->get($this->base_url . '/query/service/' . $id);
+        if ($response->ok()) {
+            $response = $response->json();
+            $result = array(
+                "status" => true,
+                "result" => $response
+            );
+            return json_encode($result);
+        } else {
+            return $this->apiError($response->json());
+        }
+    }
 }
