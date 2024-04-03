@@ -103,7 +103,6 @@ const Booking = observer(() => {
             });
             setServices(entries);
             setChecked(entries);
-            console.log(entries);
           }
           setProgress(false);
         }

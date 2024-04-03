@@ -119,7 +119,7 @@ const TerminalsSearch = observer(() => {
             filterSelectedOptions
             value={store.searchVal}
             noOptionsText="Нет результатов"
-            popupIcon={loading ? <CircularProgress color="primary" size={20} /> : <AirplanemodeActiveIcon sx={{ color: 'primary.main', transform: 'none' }} />}
+            popupIcon={loading ? <CircularProgress color="primary" size={20} /> : store.iataVal ? <span style={{color: '#3483fa'}}>{store.iataVal}</span> : <AirplanemodeActiveIcon sx={{ color: 'primary.main', transform: 'none' }} />}
             onChange={(event, newValue) => {
                 setOptions(newValue ? [newValue, ...options] : options);
                 store.changeSearchVal(newValue);
@@ -135,8 +135,8 @@ const TerminalsSearch = observer(() => {
                         id="search-box"
                         sx={{
                             background: 'white',
-                            "& input": {
-                                pt: '4px'
+                            "& .MuiInputBase-input": {
+                                pt: '4px !important'
                             },
                             width: {
                                 xs: '100%',
