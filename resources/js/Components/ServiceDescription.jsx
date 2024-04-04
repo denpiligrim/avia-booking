@@ -81,8 +81,26 @@ const ServiceDescription = ({ open, setOpen, serviceInfo }) => {
               background: `url(${data.common.interior_photos[0]?.url?.replace('sandbox.', '')})`,
               backgroundSize: 'cover',
               backgroundRepeat: 'no-repeat',
-              position: 'relative'
+              position: 'relative',
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center'
             }}>
+              <Box sx={{
+                backgroundColor: 'rgba(0,0,0,.5)',
+                width: '100%',
+                maxWidth: '800px',
+                color: 'white',
+                p: 4
+              }}>
+                <Typography variant='h4' component={"p"} fontWeight={600}>{serviceInfo.priceGroup?.passengerCategories[2].price?.value?.toString().replace(/(\d)(?=(\d{3})+(\D|$))/g, '$1 ') + ' ₽'}</Typography>
+                <Typography variant='body1' component={"p"} gutterBottom>при заказе для одного пассажира</Typography>
+                <Typography variant='body2' component={"p"} gutterBottom>Дети до {serviceInfo.priceGroup?.passengerCategories[0].ages.max} лет - бесплатно. Дети от {serviceInfo.priceGroup?.passengerCategories[1].ages.min} до {serviceInfo.priceGroup?.passengerCategories[1].ages.max} лет - {serviceInfo.priceGroup?.passengerCategories[1].price?.value?.toString().replace(/(\d)(?=(\d{3})+(\D|$))/g, '$1 ') + ' ₽'}.</Typography>
+                {parseFloat(serviceInfo.priceGroup?.passengerCategories[2].urgency_charge).toFixed() > 0 && (
+                  <Typography variant='body2' component={"p"} gutterBottom>При оформлении за 25 часов до услуги — наценка за срочность: {parseFloat(serviceInfo.priceGroup?.passengerCategories[2].urgency_charge).toFixed().toString().replace(/(\d)(?=(\d{3})+(\D|$))/g, '$1 ') + ' ₽'}</Typography>
+                )}
+                <Button variant="contained" sx={{ borderRadius: '30px', mt: 2, px: 4 }}>Заказать</Button>
+              </Box>
               <Typography variant='body1' component="div" onClick={toggleFullscreen} sx={{
                 cursor: 'pointer',
                 backgroundColor: 'primary.main',
@@ -93,7 +111,7 @@ const ServiceDescription = ({ open, setOpen, serviceInfo }) => {
                 px: '20px',
                 right: 20
               }}>
-                <CollectionsIcon sx={{verticalAlign: 'middle'}} /> <span style={{verticalAlign: 'middle'}}>Фотогалерея</span>
+                <CollectionsIcon sx={{ verticalAlign: 'middle' }} /> <span style={{ verticalAlign: 'middle' }}>Фотогалерея</span>
               </Typography>
             </Box>
             <DialogContentText sx={{ p: 2 }}>
