@@ -259,7 +259,7 @@ const Booking = observer(() => {
                               display: 'flex'
                             }}>
                               <Typography component="div" variant="h5">
-                                {el.priceGroup?.passengerCategories[2]?.price ? (<>{el.priceGroup?.passengerCategories[2].price?.value?.toString().replace(/(\d)(?=(\d{3})+(\D|$))/g, '$1 ') + ' ₽ /'} <ManIcon sx={{ verticalAlign: 'middle' }} /></>) : ''}
+                                {el.priceGroup?.passengerCategories[el.priceGroup?.passengerCategories.length - 1]?.price ? (<>{el.priceGroup?.passengerCategories[el.priceGroup?.passengerCategories.length - 1].price?.value?.toString().replace(/(\d)(?=(\d{3})+(\D|$))/g, '$1 ') + ' ₽ /'} <ManIcon sx={{ verticalAlign: 'middle' }} /></>) : ''}
                               </Typography>
                             </CardContent>
                           </Box>

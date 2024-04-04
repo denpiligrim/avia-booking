@@ -4,7 +4,7 @@
     "opening_hours": "Круглосуточно",
     "hours_to_stay": "",
     "description": "Отдельное помещение с полным комплексом услуг и комфортабельной зоной ожидания",
-    "detailed_description": "При выходе с трапа самолета пассажир должен подойти к агенту VIP-залa, который ожидает пассажира со специальной табличкой VIP-зала «VIP» или именной, если это оговорено заранее, представиться и передать баажные бирки при наличии зарегистрированного багажа. Далее в сопровождении сотрудника VIP-зала пассажир на автотранспорте для VIP-пассажиров следует в VIP-зал.Время до выдачи багажа пассажир проводит в комфортабельном VIP-зале. Багаж сотрудники получают самостоятельно по багажным квитанциям пассажира и доставляют в VIP-зал или на автостоянку.",
+    "detailed_description": "Пассажиру необходимо прибыть в аэропорт не позднее, чем 1 час 20 минут до времени отправления рейса. Пассажир самостоятельно проходит в VIP-зал, следует к стойке регистрации и представляется диспетчеру (называет свою фамилию и номер рейса). Агент VIP-зала помогает пройти регистрацию на рейс и оформить багаж. Далее пассажир ожидает начала посадки в комфортабельном помещении.По приглашению агента VIP-зала пассажир проходит контроль авиационной безопасности в установленном порядке. После прохождения необходимых процедур пассажира доставляют до борта самолета на автотранспорте для VIP-пассажиров.",
     "special_conditions": "",
     "important_information": "",
     "has_tax_refund": false,
@@ -100,7 +100,7 @@
     "has_urgent_tariff": true,
     "cancellation_description": "Аннуляция менее чем за 4 часа до обслуживания или неявка на услугу — штраф 100%.",
     "tariffs_for_children": "Дети до 2 лет — бесплатно. Дети от 2 до 12 лет обслуживаются со скидкой 50% от взрослого тарифа.",
-    "how_to_get_by_car": "К VIP-залу ведет отдельный автомобильный подъезд. Следовать указателям по направлению к реконструированного терминалу «Пулково-1», который расположен слева от нового терминала",
+    "how_to_get_by_car": "",
     "driving_map": [],
     "is_available_by_qr_code": false,
     "is_available_by_dragon_pass": false,
@@ -152,9 +152,43 @@
       ]
     },
     {
+      "name": "Контроль и досмотр",
+      "type": "inspection-and-control",
+      "priority": 20,
+      "description": "Индивидуальная регистрация на рейс и отдельный предполетный досмотр в VIP-зале",
+      "detailed_description": "",
+      "is_important": true,
+      "options": [
+        {
+          "name": "Регистрация на рейс и оформление багажа",
+          "availability": 0,
+          "priority": 0,
+          "description": "",
+          "detailed_description": "",
+          "is_important": true
+        },
+        {
+          "name": "Паспортный контроль",
+          "availability": 0,
+          "priority": 10,
+          "description": "",
+          "detailed_description": "",
+          "is_important": true
+        },
+        {
+          "name": "Предполетный досмотр",
+          "availability": 0,
+          "priority": 20,
+          "description": "",
+          "detailed_description": "",
+          "is_important": true
+        }
+      ]
+    },
+    {
       "name": "Еда и вода",
       "type": "food-and-water",
-      "priority": 20,
+      "priority": 30,
       "description": "",
       "detailed_description": "",
       "is_important": true,
@@ -180,8 +214,8 @@
     {
       "name": "Багаж",
       "type": "luggage",
-      "priority": 30,
-      "description": "Получение и доставка багажа в VIP-зал, услуги носильщика",
+      "priority": 40,
+      "description": "",
       "detailed_description": "",
       "is_important": true,
       "options": [
@@ -189,25 +223,33 @@
           "name": "Помощь с багажом",
           "availability": 0,
           "priority": 0,
+          "description": "Услуги носильщика, оформление багажа",
+          "detailed_description": "При необходимости сотрудники могут встретить пассажира у входа в VIP-зал и помочь с доставкой багажа до стойки регистрации. В таком случае пассажир или водитель должны связаться с агентом VIP-зала за 5-10 минут до прибытия по телефону: +7 812 324-34-46, +7 921 765-26-20 (оперативный телефон).",
+          "is_important": true
+        },
+        {
+          "name": "Упаковка багажа",
+          "availability": 0,
+          "priority": 10,
           "description": "",
           "detailed_description": "",
-          "is_important": true
+          "is_important": false
         }
       ]
     },
     {
       "name": "Трансфер",
       "type": "transfer",
-      "priority": 40,
+      "priority": 50,
       "description": "",
       "detailed_description": "",
       "is_important": true,
       "options": [
         {
-          "name": "Трансфер от борта",
+          "name": "Трансфер до борта",
           "availability": 0,
           "priority": 0,
-          "description": "Трансфер от самолета с сопровождением",
+          "description": "Трансфер до самолета с сопровождением",
           "detailed_description": "",
           "is_important": true
         }
@@ -216,7 +258,7 @@
     {
       "name": "Парковка",
       "type": "parking",
-      "priority": 50,
+      "priority": 60,
       "description": "",
       "detailed_description": "",
       "is_important": true,
@@ -234,7 +276,7 @@
     {
       "name": "Дети",
       "type": "children",
-      "priority": 60,
+      "priority": 70,
       "description": "",
       "detailed_description": "",
       "is_important": false,
@@ -252,7 +294,7 @@
     {
       "name": "Интернет/TV",
       "type": "the-internet-and-tv",
-      "priority": 70,
+      "priority": 80,
       "description": "Wi-Fi, cпутниковое TV",
       "detailed_description": "",
       "is_important": false,
@@ -278,7 +320,7 @@
     {
       "name": "Пресса",
       "type": "press",
-      "priority": 80,
+      "priority": 90,
       "description": "",
       "detailed_description": "",
       "is_important": false,
@@ -296,7 +338,7 @@
     {
       "name": "Удобства",
       "type": "comfort",
-      "priority": 90,
+      "priority": 100,
       "description": "",
       "detailed_description": "",
       "is_important": false,
@@ -330,7 +372,7 @@
     {
       "name": "Оргтехника",
       "type": "office-equipment",
-      "priority": 100,
+      "priority": 110,
       "description": "",
       "detailed_description": "",
       "is_important": false,
@@ -372,13 +414,13 @@
     {
       "name": "Переговоры",
       "type": "meeting-room",
-      "priority": 110,
+      "priority": 120,
       "description": "",
       "detailed_description": "",
       "is_important": false,
       "options": [
         {
-          "name": "Комната для переговоров",
+          "name": "Комната для переговоров (по предварительному заказу)",
           "availability": 3,
           "priority": 0,
           "description": "",
@@ -390,7 +432,7 @@
     {
       "name": "Tax free",
       "type": "tax-free",
-      "priority": 150,
+      "priority": 130,
       "description": "Собственный магазин Duty Free",
       "detailed_description": "",
       "is_important": false,

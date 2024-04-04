@@ -1,5 +1,5 @@
 import { useTheme } from '@emotion/react';
-import { Box, Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, IconButton, Typography, useMediaQuery } from '@mui/material'
+import { Box, Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Grid, IconButton, Typography, useMediaQuery } from '@mui/material'
 import CloseIcon from '@mui/icons-material/Close';
 import CollectionsIcon from '@mui/icons-material/Collections';
 import axios from 'axios';
@@ -8,6 +8,7 @@ import { useState } from 'react';
 import ImageGallery from 'react-image-gallery';
 import { useRef } from 'react';
 import "react-image-gallery/styles/scss/image-gallery.scss";
+import optionCategories from '../helpers/optionCategories';
 
 const ServiceDescription = ({ open, setOpen, serviceInfo }) => {
 
@@ -78,7 +79,7 @@ const ServiceDescription = ({ open, setOpen, serviceInfo }) => {
             <Box sx={{
               width: '100%',
               height: '500px',
-              background: `url(${data.common.interior_photos[0]?.url?.replace('sandbox.', '')})`,
+              background: data.common.interior_photos.length > 0 ? `url(${data.common.interior_photos[0]?.url?.replace('sandbox.', '')})` : 'url(/assets/images/plane-bg.webp)',
               backgroundSize: 'cover',
               backgroundRepeat: 'no-repeat',
               position: 'relative',
@@ -93,16 +94,17 @@ const ServiceDescription = ({ open, setOpen, serviceInfo }) => {
                 color: 'white',
                 p: 4
               }}>
-                <Typography variant='h4' component={"p"} fontWeight={600}>{serviceInfo.priceGroup?.passengerCategories[2].price?.value?.toString().replace(/(\d)(?=(\d{3})+(\D|$))/g, '$1 ') + ' ₽'}</Typography>
+                <Typography variant='h4' component={"p"} fontWeight={600}>{serviceInfo.priceGroup?.passengerCategories[serviceInfo.priceGroup?.passengerCategories.length - 1].price?.value?.toString().replace(/(\d)(?=(\d{3})+(\D|$))/g, '$1 ') + ' ₽'}</Typography>
                 <Typography variant='body1' component={"p"} gutterBottom>при заказе для одного пассажира</Typography>
                 <Typography variant='body2' component={"p"} gutterBottom>Дети до {serviceInfo.priceGroup?.passengerCategories[0].ages.max} лет - бесплатно. Дети от {serviceInfo.priceGroup?.passengerCategories[1].ages.min} до {serviceInfo.priceGroup?.passengerCategories[1].ages.max} лет - {serviceInfo.priceGroup?.passengerCategories[1].price?.value?.toString().replace(/(\d)(?=(\d{3})+(\D|$))/g, '$1 ') + ' ₽'}.</Typography>
-                {parseFloat(serviceInfo.priceGroup?.passengerCategories[2].urgency_charge).toFixed() > 0 && (
-                  <Typography variant='body2' component={"p"} gutterBottom>При оформлении за 25 часов до услуги — наценка за срочность: {parseFloat(serviceInfo.priceGroup?.passengerCategories[2].urgency_charge).toFixed().toString().replace(/(\d)(?=(\d{3})+(\D|$))/g, '$1 ') + ' ₽'}</Typography>
+                {parseFloat(serviceInfo.priceGroup?.passengerCategories[serviceInfo.priceGroup?.passengerCategories.length - 1].urgency_charge).toFixed() > 0 && (
+                  <Typography variant='body2' component={"p"} gutterBottom>При оформлении за 25 часов до услуги — наценка за срочность: {parseFloat(serviceInfo.priceGroup?.passengerCategories[serviceInfo.priceGroup?.passengerCategories.length - 1].urgency_charge).toFixed().toString().replace(/(\d)(?=(\d{3})+(\D|$))/g, '$1 ') + ' ₽'}</Typography>
                 )}
                 <Button variant="contained" sx={{ borderRadius: '30px', mt: 2, px: 4 }}>Заказать</Button>
               </Box>
               <Typography variant='body1' component="div" onClick={toggleFullscreen} sx={{
                 cursor: 'pointer',
+                display: data.common.interior_photos.length > 0 ? 'block' : 'none',
                 backgroundColor: 'primary.main',
                 color: 'white',
                 position: 'absolute',
@@ -114,9 +116,26 @@ const ServiceDescription = ({ open, setOpen, serviceInfo }) => {
                 <CollectionsIcon sx={{ verticalAlign: 'middle' }} /> <span style={{ verticalAlign: 'middle' }}>Фотогалерея</span>
               </Typography>
             </Box>
-            <DialogContentText sx={{ p: 2 }}>
-              {data.common.detailed_description}
-            </DialogContentText>
+            <Grid container>
+              <Grid item xs={12} md={3} p={2.5} order={fullScreen ? 2 : 1}>
+                {data.option_categories.map(el => (
+                  <React.Fragment key={"el-" + el.type}>
+                    {console.log(el.type)}
+                    {console.log(optionCategories[el.type])}
+                    <Typography variant='body1' component={"p"}>{optionCategories[el.type]?.icon()}</Typography>
+                    <Typography variant='caption' component={"p"} gutterBottom>{el.description}</Typography>
+                    {el.options.map((item, i) => (
+                      <Typography mb={i === el.options.length - 1 ? 3 : 0} key={"item-" + i} variant='caption' component={"p"} gutterBottom>{item.description ? item.description : item.name}</Typography>
+                    ))}
+                  </React.Fragment>
+                ))}
+              </Grid>
+              <Grid item xs={12} md={9} p={2.5} order={!fullScreen ? 2 : 1}>
+                <DialogContentText>
+                  {data.common.detailed_description}
+                </DialogContentText>
+              </Grid>
+            </Grid>
             {fullscreen && (
               <ImageGallery
                 ref={galleryRef}
