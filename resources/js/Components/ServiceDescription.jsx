@@ -2,6 +2,8 @@ import { useTheme } from '@emotion/react';
 import { Box, Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Grid, IconButton, Typography, useMediaQuery } from '@mui/material'
 import CloseIcon from '@mui/icons-material/Close';
 import CollectionsIcon from '@mui/icons-material/Collections';
+import MapIcon from '@mui/icons-material/Map';
+import QueryBuilderIcon from '@mui/icons-material/QueryBuilder';
 import axios from 'axios';
 import React, { useEffect } from 'react'
 import { useState } from 'react';
@@ -96,7 +98,7 @@ const ServiceDescription = ({ open, setOpen, serviceInfo }) => {
               }}>
                 <Typography variant='h4' component={"p"} fontWeight={600}>{serviceInfo.priceGroup?.passengerCategories[serviceInfo.priceGroup?.passengerCategories.length - 1].price?.value?.toString().replace(/(\d)(?=(\d{3})+(\D|$))/g, '$1 ') + ' ₽'}</Typography>
                 <Typography variant='body1' component={"p"} gutterBottom>при заказе для одного пассажира</Typography>
-                <Typography variant='body2' component={"p"} gutterBottom>Дети до {serviceInfo.priceGroup?.passengerCategories[0].ages.max} лет - бесплатно. Дети от {serviceInfo.priceGroup?.passengerCategories[1].ages.min} до {serviceInfo.priceGroup?.passengerCategories[1].ages.max} лет - {serviceInfo.priceGroup?.passengerCategories[1].price?.value?.toString().replace(/(\d)(?=(\d{3})+(\D|$))/g, '$1 ') + ' ₽'}.</Typography>
+                <Typography variant='body2' component={"p"} gutterBottom>{data.common.tariffs_for_children}</Typography>
                 {parseFloat(serviceInfo.priceGroup?.passengerCategories[serviceInfo.priceGroup?.passengerCategories.length - 1].urgency_charge).toFixed() > 0 && (
                   <Typography variant='body2' component={"p"} gutterBottom>При оформлении за 25 часов до услуги — наценка за срочность: {parseFloat(serviceInfo.priceGroup?.passengerCategories[serviceInfo.priceGroup?.passengerCategories.length - 1].urgency_charge).toFixed().toString().replace(/(\d)(?=(\d{3})+(\D|$))/g, '$1 ') + ' ₽'}</Typography>
                 )}
@@ -120,8 +122,8 @@ const ServiceDescription = ({ open, setOpen, serviceInfo }) => {
               <Grid item xs={12} md={3} p={2.5} order={fullScreen ? 2 : 1}>
                 {data.option_categories.map(el => (
                   <React.Fragment key={"el-" + el.type}>
-                    {console.log(el.type)}
-                    {console.log(optionCategories[el.type])}
+                    {/* {console.log(el.type)}
+                    {console.log(optionCategories[el.type])} */}
                     <Typography variant='body1' component={"p"}>{optionCategories[el.type]?.icon()}</Typography>
                     <Typography variant='caption' component={"p"} gutterBottom>{el.description}</Typography>
                     {el.options.map((item, i) => (
@@ -131,8 +133,50 @@ const ServiceDescription = ({ open, setOpen, serviceInfo }) => {
                 ))}
               </Grid>
               <Grid item xs={12} md={9} p={2.5} order={!fullScreen ? 2 : 1}>
+                <DialogContentText gutterBottom>
+                  <Box sx={{
+                    float: 'right',
+                    backgroundColor: 'grey.300',
+                    p: 3,
+                    mx: 2,
+                    mb: 2,
+                    width: {
+                      xs: '92%',
+                      md: '50%'
+                    }
+                  }}>
+                    <Typography variant='body2' component='p' gutterBottom><MapIcon sx={{ verticalAlign: 'bottom' }} /> {data.location.how_to_find}</Typography>
+                    <Typography variant='body2' component='p'><QueryBuilderIcon sx={{ verticalAlign: 'bottom' }} /> {data.common.opening_hours}</Typography>
+                  </Box>
+                  <span>{data.common.description}</span>
+                </DialogContentText>
                 <DialogContentText>
                   {data.common.detailed_description}
+                </DialogContentText>
+                {data.option_categories.find(el => el.type === "luggage") && data.option_categories.find(el => el.type === "luggage").options.map((el, i) => (
+                  <React.Fragment key={'option' + i}>
+                    {el.detailed_description && (
+                      <>
+                        <Typography variant='h6' component='p' mt={2}>{el.name}</Typography>
+                        <DialogContentText>
+                          {el.detailed_description}
+                        </DialogContentText>
+                      </>
+                    )}
+                  </React.Fragment>
+                ))}
+                <Typography variant='h6' component='p' mt={2}>Стоимость</Typography>
+                <DialogContentText>
+                  Стоимость для одного пассажира {serviceInfo.priceGroup?.passengerCategories[serviceInfo.priceGroup?.passengerCategories.length - 1].price?.value?.toString().replace(/(\d)(?=(\d{3})+(\D|$))/g, '$1 ') + ' ₽'}
+                </DialogContentText>
+                {parseFloat(serviceInfo.priceGroup?.passengerCategories[serviceInfo.priceGroup?.passengerCategories.length - 1].urgency_charge).toFixed() > 0 && (
+                <DialogContentText>
+                  При оформлении за 25 часов до услуги — наценка за срочность: {parseFloat(serviceInfo.priceGroup?.passengerCategories[serviceInfo.priceGroup?.passengerCategories.length - 1].urgency_charge).toFixed().toString().replace(/(\d)(?=(\d{3})+(\D|$))/g, '$1 ') + ' ₽'}
+                </DialogContentText>
+                )}
+                <Typography variant='h6' component='p' mt={2}>Условия изменения и аннуляции</Typography>
+                <DialogContentText>
+                  {data.common.cancellation_description}
                 </DialogContentText>
               </Grid>
             </Grid>
