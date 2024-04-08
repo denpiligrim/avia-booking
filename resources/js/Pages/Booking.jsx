@@ -1,4 +1,4 @@
-import { Box, Button, ButtonGroup, Card, CardContent, CardMedia, Checkbox, Grid, IconButton, LinearProgress, List, ListItem, ListItemButton, ListItemIcon, ListItemText, Typography } from '@mui/material';
+import { Box, Button, ButtonGroup, Card, CardContent, CardMedia, Checkbox, Grid, IconButton, LinearProgress, List, ListItem, ListItemButton, ListItemIcon, ListItemText, Typography, useMediaQuery } from '@mui/material';
 import axios from 'axios'
 import React, { useEffect } from 'react'
 import { useState } from 'react';
@@ -9,9 +9,13 @@ import FlightTakeoffIcon from '@mui/icons-material/FlightTakeoff';
 import PublicIcon from '@mui/icons-material/Public';
 import HomeIcon from '@mui/icons-material/Home';
 import ManIcon from '@mui/icons-material/Man';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import ExpandLessIcon from '@mui/icons-material/ExpandLess';
 import { observer } from 'mobx-react-lite';
 import appState from '../store/appState';
 import ServiceDescription from '../Components/ServiceDescription';
+import { useTheme } from '@emotion/react';
+import { useNavigate } from 'react-router-dom';
 
 const Booking = observer(() => {
 
@@ -21,14 +25,19 @@ const Booking = observer(() => {
 
   const [services, setServices] = useState([]);
   const [queryParameters, setQueryParameters] = useSearchParams();
-  const [open, setOpen] = useState(false);  
-  const [serviceInfo, setServiceInfo] = useState({});  
-
+  const [open, setOpen] = useState(false);
+  const [serviceInfo, setServiceInfo] = useState({});
+  const [listExpanded, setListExpanded] = useState(false);
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('md'));
+  const navigator = useNavigate();
+  
   const handleClickOpen = (el) => {
     setServiceInfo(el);
     setOpen(true);
   };
-
+  console.trace(handleClickOpen);
+  
   const setCity = (val) => {
     store.changeSearchVal(val);
     store.changeIata(val.iata);
@@ -49,13 +58,13 @@ const Booking = observer(() => {
       newChecked.splice(currentIndex, 1);
       arrCopy[index][2] = false;
     }
-    
+
     setServices([...arrCopy]);
     setChecked(newChecked);
   };
 
   const changeCheckbox = (p) => {
-    const arrCopy = [...services];    
+    const arrCopy = [...services];
 
     if (p) {
       arrCopy.forEach(el => {
@@ -167,15 +176,20 @@ const Booking = observer(() => {
           </Box>
           <Box sx={{ textAlign: 'center' }}>
             <Box sx={{ textAlign: 'left', width: '90%', maxWidth: '500px', marginLeft: 'auto', marginRight: 'auto' }}>
-          <Button variant="text" sx={{ pl: 0, typography: 'caption' }} onClick={() => changeCheckbox(false)}>Очистить</Button>
-          <span style={{color: '#3483fa'}}>/</span>
-          <Button variant="text" sx={{ pr: 0, typography: 'caption' }} onClick={() => changeCheckbox(true)}>Выбрать все</Button>
+              <Button variant="text" sx={{ pl: 0, typography: 'caption' }} onClick={() => changeCheckbox(false)}>Очистить</Button>
+              <span style={{ color: '#3483fa' }}>/</span>
+              <Button variant="text" sx={{ pr: 0, typography: 'caption' }} onClick={() => changeCheckbox(true)}>Выбрать все</Button>
             </Box>
             <List sx={{
               width: '90%',
               maxWidth: '500px',
               marginLeft: 'auto',
               marginRight: 'auto',
+              overflowY: 'hidden',
+              height: {
+                xs: listExpanded ? 'auto' : '160px',
+                md: listExpanded ? 'auto' : '245px'
+              },
               pt: 0,
               bgcolor: 'transparent',
               color: 'white',
@@ -207,6 +221,11 @@ const Booking = observer(() => {
                 );
               })}
             </List>
+            {((isMobile && services.length > 3) || (!isMobile && services.length > 5)) && (
+              <IconButton aria-label="expand" sx={{ color: 'white', backgroundColor: 'primary.main' }} onClick={() => setListExpanded(!listExpanded)}>
+                {listExpanded ? <ExpandLessIcon /> : <ExpandMoreIcon />}
+              </IconButton>
+            )}
           </Box>
         </Grid>
         <Grid item xs={12} md={8}>
@@ -220,51 +239,51 @@ const Booking = observer(() => {
                         {el[0] === "VIP-обслуживание" ? "VIP-зал" : el[0]}
                       </Typography>
                       <Box mt={2} mb={5}>
-                      {el[1].map((el, i) => (
-                        <Card key={'item' + el.id} sx={{ m: 1 }}>
-                          <Box sx={{ display: 'flex', flexDirection: 'row' }}>
-                            {el.interiorPhotos.length > 0 && (
-                              <CardMedia
-                                component="img"
-                                sx={{ width: 151 }}
-                                image={el.interiorPhotos[0]?.url?.replace('sandbox.', '') || ''}
-                                alt={el.interiorPhotos[0]?.alt?.ru || "Image"}
-                              />
-                            )}
-                            <CardContent sx={{ textAlign: 'left' }}>
-                              <Typography component="div" variant="h5">
-                                {el.name}
-                              </Typography>
-                              <Typography component="div" variant="body1" fontWeight={600}>
-                                {el.flightType === "domestic" ? (
-                                  <>
-                                    <HomeIcon sx={{ verticalAlign: 'sub' }} /> Внутренний рейс, {el.type === "departure" ? "вылет" : el.type === "arrival" ? "прилет" : ""}
-                                  </>
-                                ) : el.flightType === "international" ? (
-                                  <>
-                                    <PublicIcon sx={{ verticalAlign: 'sub' }} /> Международный рейс, {el.type === "departure" ? "вылет" : el.type === "arrival" ? "прилет" : ""}
-                                  </>
-                                ) : (
-                                  <>
-                                    <PublicIcon sx={{ verticalAlign: 'sub' }} /> <HomeIcon sx={{ verticalAlign: 'sub' }} /> Международный или внутренний рейс, {el.type === "departure" ? "вылет" : el.type === "arrival" ? "прилет" : ""}
-                                  </>
-                                )}
-                              </Typography>
-                              <Button variant="text" sx={{ m: 1 }} onClick={() => handleClickOpen(el)}>Подробнее</Button>
-                              <Button variant="contained" sx={{ m: 1 }}>Заказать</Button>
-                            </CardContent>
-                            <CardContent sx={{
-                              marginLeft: 'auto',
-                              alignItems: 'center',
-                              display: 'flex'
-                            }}>
-                              <Typography component="div" variant="h5">
-                                {el.priceGroup?.passengerCategories[el.priceGroup?.passengerCategories.length - 1]?.price ? (<>{el.priceGroup?.passengerCategories[el.priceGroup?.passengerCategories.length - 1].price?.value?.toString().replace(/(\d)(?=(\d{3})+(\D|$))/g, '$1 ') + ' ₽ /'} <ManIcon sx={{ verticalAlign: 'middle' }} /></>) : ''}
-                              </Typography>
-                            </CardContent>
-                          </Box>
-                        </Card>
-                      ))}
+                        {el[1].map((el, i) => (
+                          <Card key={'item' + el.id} sx={{ m: 1 }}>
+                            <Box sx={{ display: 'flex', flexDirection: 'row' }}>
+                              {el.interiorPhotos.length > 0 && (
+                                <CardMedia
+                                  component="img"
+                                  sx={{ width: 151 }}
+                                  image={el.interiorPhotos[0]?.url?.replace('sandbox.', '') || ''}
+                                  alt={el.interiorPhotos[0]?.alt?.ru || "Image"}
+                                />
+                              )}
+                              <CardContent sx={{ textAlign: 'left' }}>
+                                <Typography component="div" variant="h5">
+                                  {el.name}
+                                </Typography>
+                                <Typography component="div" variant="body1" fontWeight={600}>
+                                  {el.flightType === "domestic" ? (
+                                    <>
+                                      <HomeIcon sx={{ verticalAlign: 'sub' }} /> Внутренний рейс, {el.type === "departure" ? "вылет" : el.type === "arrival" ? "прилет" : ""}
+                                    </>
+                                  ) : el.flightType === "international" ? (
+                                    <>
+                                      <PublicIcon sx={{ verticalAlign: 'sub' }} /> Международный рейс, {el.type === "departure" ? "вылет" : el.type === "arrival" ? "прилет" : ""}
+                                    </>
+                                  ) : (
+                                    <>
+                                      <PublicIcon sx={{ verticalAlign: 'sub' }} /> <HomeIcon sx={{ verticalAlign: 'sub' }} /> Международный или внутренний рейс, {el.type === "departure" ? "вылет" : el.type === "arrival" ? "прилет" : ""}
+                                    </>
+                                  )}
+                                </Typography>
+                                <Button variant="text" sx={{ m: 1 }} onClick={() => handleClickOpen(el)}>Подробнее</Button>
+                                <Button variant="contained" sx={{ m: 1 }} onClick={() => navigator('/booking/checkout')}>Заказать</Button>
+                              </CardContent>
+                              <CardContent sx={{
+                                marginLeft: 'auto',
+                                alignItems: 'center',
+                                display: 'flex'
+                              }}>
+                                <Typography component="div" variant="h5">
+                                  {el.priceGroup ? (<>{el.priceGroup?.passengerCategories[el.priceGroup?.passengerCategories.length - 1].price?.value?.toString().replace(/(\d)(?=(\d{3})+(\D|$))/g, '$1 ') + ' ₽ /'} <ManIcon sx={{ verticalAlign: 'middle' }} /></>) : ''}
+                                </Typography>
+                              </CardContent>
+                            </Box>
+                          </Card>
+                        ))}
                       </Box>
                     </>
                   )}

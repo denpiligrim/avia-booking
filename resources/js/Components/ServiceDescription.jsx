@@ -11,6 +11,7 @@ import ImageGallery from 'react-image-gallery';
 import { useRef } from 'react';
 import "react-image-gallery/styles/scss/image-gallery.scss";
 import optionCategories from '../helpers/optionCategories';
+import { useNavigate } from 'react-router-dom';
 
 const ServiceDescription = ({ open, setOpen, serviceInfo }) => {
 
@@ -19,6 +20,7 @@ const ServiceDescription = ({ open, setOpen, serviceInfo }) => {
   const [data, setData] = useState({});
   const [images, setImages] = useState([]);
   const galleryRef = useRef(null);
+  const navigator = useNavigate();
 
   const handleClose = () => {
     setOpen(false);
@@ -96,13 +98,17 @@ const ServiceDescription = ({ open, setOpen, serviceInfo }) => {
                 color: 'white',
                 p: 4
               }}>
-                <Typography variant='h4' component={"p"} fontWeight={600}>{serviceInfo.priceGroup?.passengerCategories[serviceInfo.priceGroup?.passengerCategories.length - 1].price?.value?.toString().replace(/(\d)(?=(\d{3})+(\D|$))/g, '$1 ') + ' ₽'}</Typography>
-                <Typography variant='body1' component={"p"} gutterBottom>при заказе для одного пассажира</Typography>
+                {serviceInfo.priceGroup && (
+                  <>
+                    <Typography variant='h4' component={"p"} fontWeight={600}>{serviceInfo.priceGroup?.passengerCategories[serviceInfo.priceGroup?.passengerCategories.length - 1].price?.value?.toString().replace(/(\d)(?=(\d{3})+(\D|$))/g, '$1 ') + ' ₽'}</Typography>
+                    <Typography variant='body1' component={"p"} gutterBottom>при заказе для одного пассажира</Typography>
+                  </>
+                )}
                 <Typography variant='body2' component={"p"} gutterBottom>{data.common.tariffs_for_children}</Typography>
                 {parseFloat(serviceInfo.priceGroup?.passengerCategories[serviceInfo.priceGroup?.passengerCategories.length - 1].urgency_charge).toFixed() > 0 && (
                   <Typography variant='body2' component={"p"} gutterBottom>При оформлении за 25 часов до услуги — наценка за срочность: {parseFloat(serviceInfo.priceGroup?.passengerCategories[serviceInfo.priceGroup?.passengerCategories.length - 1].urgency_charge).toFixed().toString().replace(/(\d)(?=(\d{3})+(\D|$))/g, '$1 ') + ' ₽'}</Typography>
                 )}
-                <Button variant="contained" sx={{ borderRadius: '30px', mt: 2, px: 4 }}>Заказать</Button>
+                <Button variant="contained" sx={{ borderRadius: '30px', mt: 2, px: 4 }} onClick={() => navigator('/booking/checkout')}>Заказать</Button>
               </Box>
               <Typography variant='body1' component="div" onClick={toggleFullscreen} sx={{
                 cursor: 'pointer',
@@ -138,15 +144,19 @@ const ServiceDescription = ({ open, setOpen, serviceInfo }) => {
                     float: 'right',
                     backgroundColor: 'grey.300',
                     p: 3,
-                    mx: 2,
+                    ml: 2,
                     mb: 2,
                     width: {
                       xs: '92%',
                       md: '50%'
                     }
                   }}>
-                    <Typography variant='body2' component='p' gutterBottom><MapIcon sx={{ verticalAlign: 'bottom' }} /> {data.location.how_to_find}</Typography>
-                    <Typography variant='body2' component='p'><QueryBuilderIcon sx={{ verticalAlign: 'bottom' }} /> {data.common.opening_hours}</Typography>
+                    {data.location.how_to_find && (
+                      <Typography variant='body2' component='p' gutterBottom><MapIcon sx={{ verticalAlign: 'bottom' }} /> {data.location.how_to_find}</Typography>
+                    )}
+                    {data.common.opening_hours && (
+                      <Typography variant='body2' component='p'><QueryBuilderIcon sx={{ verticalAlign: 'bottom' }} /> {data.common.opening_hours}</Typography>
+                    )}
                   </Box>
                   <span>{data.common.description}</span>
                 </DialogContentText>
@@ -165,14 +175,18 @@ const ServiceDescription = ({ open, setOpen, serviceInfo }) => {
                     )}
                   </React.Fragment>
                 ))}
-                <Typography variant='h6' component='p' mt={2}>Стоимость</Typography>
-                <DialogContentText>
-                  Стоимость для одного пассажира {serviceInfo.priceGroup?.passengerCategories[serviceInfo.priceGroup?.passengerCategories.length - 1].price?.value?.toString().replace(/(\d)(?=(\d{3})+(\D|$))/g, '$1 ') + ' ₽'}
-                </DialogContentText>
-                {parseFloat(serviceInfo.priceGroup?.passengerCategories[serviceInfo.priceGroup?.passengerCategories.length - 1].urgency_charge).toFixed() > 0 && (
-                <DialogContentText>
-                  При оформлении за 25 часов до услуги — наценка за срочность: {parseFloat(serviceInfo.priceGroup?.passengerCategories[serviceInfo.priceGroup?.passengerCategories.length - 1].urgency_charge).toFixed().toString().replace(/(\d)(?=(\d{3})+(\D|$))/g, '$1 ') + ' ₽'}
-                </DialogContentText>
+                {serviceInfo.priceGroup && (
+                  <>
+                    <Typography variant='h6' component='p' mt={2}>Стоимость</Typography>
+                    <DialogContentText>
+                      Стоимость для одного пассажира {serviceInfo.priceGroup?.passengerCategories[serviceInfo.priceGroup?.passengerCategories.length - 1].price?.value?.toString().replace(/(\d)(?=(\d{3})+(\D|$))/g, '$1 ') + ' ₽'}
+                    </DialogContentText>
+                    {parseFloat(serviceInfo.priceGroup?.passengerCategories[serviceInfo.priceGroup?.passengerCategories.length - 1].urgency_charge).toFixed() > 0 && (
+                      <DialogContentText>
+                        При оформлении за 25 часов до услуги — наценка за срочность: {parseFloat(serviceInfo.priceGroup?.passengerCategories[serviceInfo.priceGroup?.passengerCategories.length - 1].urgency_charge).toFixed().toString().replace(/(\d)(?=(\d{3})+(\D|$))/g, '$1 ') + ' ₽'}
+                      </DialogContentText>
+                    )}
+                  </>
                 )}
                 <Typography variant='h6' component='p' mt={2}>Условия изменения и аннуляции</Typography>
                 <DialogContentText>

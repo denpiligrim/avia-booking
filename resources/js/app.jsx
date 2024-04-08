@@ -14,6 +14,7 @@ import Footer from './Components/Footer';
 // import ToTopBtn from './Components/ToTopBtn';
 import Privacy from './Pages/Privacy';
 import Booking from './Pages/Booking';
+import Checkout from './Pages/Checkout';
 
 const newTheme = createTheme({
   palette: {
@@ -64,6 +65,7 @@ ReactDOM.createRoot(document.getElementById('app')).render(
         <Routes>
           <Route path='/' element={<Main />} />
           <Route path='/booking' element={<Booking />} />
+          <Route path='/booking/checkout' element={<Checkout />} />
           {/* <Route path='/privacy-policy' element={<Privacy />} />
             <Route path="*" element={<Error404 />} /> */}
         </Routes>
