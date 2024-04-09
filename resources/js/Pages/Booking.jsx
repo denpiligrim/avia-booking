@@ -81,6 +81,10 @@ const Booking = observer(() => {
 
   }
 
+  const toOrder = (el) => {
+    navigator('');
+  }
+
   useEffect(() => {
     setProgress(true);
     if (store.iataVal && store.directionVal) {
@@ -270,7 +274,7 @@ const Booking = observer(() => {
                                   )}
                                 </Typography>
                                 <Button variant="text" sx={{ m: 1 }} onClick={() => handleClickOpen(el)}>Подробнее</Button>
-                                <Button variant="contained" sx={{ m: 1 }} onClick={() => navigator('/booking/checkout')}>Заказать</Button>
+                                <Button variant="contained" sx={{ m: 1 }} onClick={() => toOrder(el)}>Заказать</Button>
                               </CardContent>
                               <CardContent sx={{
                                 marginLeft: 'auto',
