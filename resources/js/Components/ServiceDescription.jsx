@@ -32,6 +32,13 @@ const ServiceDescription = ({ open, setOpen, serviceInfo }) => {
     setFullscreen(!fullscreen);
   };
 
+  const toOrder = (el) => {
+    localStorage.setItem('order', JSON.stringify({
+      id: el.id      
+    }));
+    navigator('/booking/checkout');
+  }
+
   useEffect(() => {
     if (serviceInfo.id) {
       axios.get(`/api/service?id=${serviceInfo.id}`)
@@ -108,7 +115,7 @@ const ServiceDescription = ({ open, setOpen, serviceInfo }) => {
                 {parseFloat(serviceInfo.priceGroup?.passengerCategories[serviceInfo.priceGroup?.passengerCategories.length - 1].urgency_charge).toFixed() > 0 && (
                   <Typography variant='body2' component={"p"} gutterBottom>При оформлении за 25 часов до услуги — наценка за срочность: {parseFloat(serviceInfo.priceGroup?.passengerCategories[serviceInfo.priceGroup?.passengerCategories.length - 1].urgency_charge).toFixed().toString().replace(/(\d)(?=(\d{3})+(\D|$))/g, '$1 ') + ' ₽'}</Typography>
                 )}
-                <Button variant="contained" sx={{ borderRadius: '30px', mt: 2, px: 4 }} onClick={() => navigator('/booking/checkout')}>Заказать</Button>
+                <Button variant="contained" sx={{ borderRadius: '30px', mt: 2, px: 4 }} onClick={() => toOrder(serviceInfo)}>Заказать</Button>
               </Box>
               <Typography variant='body1' component="div" onClick={toggleFullscreen} sx={{
                 cursor: 'pointer',

@@ -36,7 +36,6 @@ const Booking = observer(() => {
     setServiceInfo(el);
     setOpen(true);
   };
-  console.trace(handleClickOpen);
   
   const setCity = (val) => {
     store.changeSearchVal(val);
@@ -82,7 +81,10 @@ const Booking = observer(() => {
   }
 
   const toOrder = (el) => {
-    navigator('');
+    localStorage.setItem('order', JSON.stringify({
+      id: el.id      
+    }));
+    navigator('/booking/checkout');
   }
 
   useEffect(() => {
