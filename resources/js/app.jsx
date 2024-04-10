@@ -15,6 +15,7 @@ import Footer from './Components/Footer';
 import Privacy from './Pages/Privacy';
 import Booking from './Pages/Booking';
 import Checkout from './Pages/Checkout';
+import { ruRU } from '@mui/x-date-pickers/locales';
 
 const newTheme = createTheme({
   palette: {
@@ -43,6 +44,9 @@ const newTheme = createTheme({
     MuiOutlinedInput: {
       styleOverrides: {
         root: {
+          "&:not(.MuiAutocomplete-inputRoot)": {
+            background: 'white'
+          },
           "&:hover .MuiOutlinedInput-notchedOutline": {
             borderColor: '#3483fa'
           },
@@ -53,7 +57,7 @@ const newTheme = createTheme({
       }
     }
   }
-});
+}, ruRU);
 
 ReactDOM.createRoot(document.getElementById('app')).render(
   <BrowserRouter>

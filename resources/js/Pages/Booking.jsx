@@ -81,9 +81,7 @@ const Booking = observer(() => {
   }
 
   const toOrder = (el) => {
-    localStorage.setItem('order', JSON.stringify({
-      id: el.id      
-    }));
+    localStorage.setItem('order', JSON.stringify(el));
     navigator('/booking/checkout');
   }
 
