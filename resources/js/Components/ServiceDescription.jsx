@@ -81,7 +81,7 @@ const ServiceDescription = ({ open, setOpen, serviceInfo }) => {
         >
           <DialogTitle id="responsive-dialog-title" sx={{ backgroundColor: 'primary.main', color: 'white', position: 'relative' }}>
             <Typography variant='body2' component={"p"}>{serviceInfo.terminal.label}, {serviceInfo.type === "departure" ? "вылет" : serviceInfo.type === "arrival" ? "прилет" : ""}</Typography>
-            <Typography variant='h6' component={"p"}>{data.common.name} для {serviceInfo.flightType === "domestic" ? "внутренних" : serviceInfo.flightType === "international" ? "международных" : ""} рейсов</Typography>
+            <Typography variant='h6' component={"p"}>{data.common.name} для {serviceInfo.flightType === "domestic" ? "внутренних" : serviceInfo.flightType === "international" ? "международных" : "международных или внутренних"} рейсов</Typography>
             <IconButton aria-label="close" onClick={handleClose} sx={{ position: 'absolute', top: 5, right: 5 }}>
               <CloseIcon sx={{ color: 'white' }} />
             </IconButton>
