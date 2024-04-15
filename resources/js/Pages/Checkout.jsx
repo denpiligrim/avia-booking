@@ -17,6 +17,7 @@ import CitiesSearch from '../Components/CitiesSearch';
 const Checkout = () => {
 
   const [activeStep, setActiveStep] = useState(0);
+  const [totalPrice, setTotalPrice] = useState(0);
   const [serviceInfo, setServiceInfo] = useState({});
   const [data, setData] = useState({});
   const [date, setDate] = useState(dayjs());
@@ -27,7 +28,7 @@ const Checkout = () => {
     {
       firstName: '',
       lastName: '',
-      passengerCategory: 0,
+      passengerCategory: 2,
       birthDate: null
     }
   ]);
@@ -90,7 +91,7 @@ const Checkout = () => {
     newArr.push({
       firstName: '',
       lastName: '',
-      passengerCategory: 0,
+      passengerCategory: 2,
       birthDate: null
     });
     setPassengers([...newArr]);
@@ -133,6 +134,15 @@ const Checkout = () => {
         });
     }
   }, [])
+
+  useEffect(() => {
+    let sum = 0;
+    const localServiceInfo = JSON.parse(localStorage.getItem('order'));
+    passengers.forEach(el => {
+      sum += localServiceInfo.priceGroup.passengerCategories[el.passengerCategory].price.value;
+    });
+    setTotalPrice(sum);
+  }, [passengers])
 
   return (
     <Grid item xs={12}>
@@ -215,11 +225,11 @@ const Checkout = () => {
                         }
                       }}
                     >
-                      <ToggleButton value="0">Взрослый</ToggleButton>
+                      <ToggleButton value="2">Взрослый</ToggleButton>
                       <ToggleButton value="1">Ребенок 2-12 лет</ToggleButton>
-                      <ToggleButton value="2">Ребенок до 2 лет</ToggleButton>
+                      <ToggleButton value="0">Ребенок до 2 лет</ToggleButton>
                     </ToggleButtonGroup>
-                    {el.passengerCategory !== 0 && (
+                    {el.passengerCategory !== 2 && (
                       <>
                         <Typography variant="body2" component="p" sx={{ color: 'white' }}>Дата рождения</Typography>
                         <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale='ru'>
@@ -227,6 +237,8 @@ const Checkout = () => {
                             <DatePicker
                               value={el.birthDate}
                               onChange={(newValue) => changePassDate(i, newValue)}
+                              minDate={}
+                              maxDate={}
                             />
                           </DemoContainer>
                         </LocalizationProvider>
@@ -265,6 +277,10 @@ const Checkout = () => {
                 3
               </>
             )}
+          </Box>
+          <Box px={4}>
+            <Typography variant="body2" component="p" sx={{ color: 'white' }} gutterBottom>Итоговая стоимость</Typography>
+            <Typography variant="h5" component="p" sx={{ color: 'white', mt: 3 }} gutterBottom>{totalPrice.toString().replace(/(\d)(?=(\d{3})+(\D|$))/g, '$1 ') + ' ₽'}</Typography>
           </Box>
           <Box textAlign={'center'}>
             <Button variant="text" onClick={prevStep} sx={{ display: activeStep === 0 ? 'none' : 'inline-flex' }}>Назад</Button>
