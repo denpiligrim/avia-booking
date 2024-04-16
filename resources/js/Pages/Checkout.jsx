@@ -237,8 +237,6 @@ const Checkout = () => {
                             <DatePicker
                               value={el.birthDate}
                               onChange={(newValue) => changePassDate(i, newValue)}
-                              minDate={}
-                              maxDate={}
                             />
                           </DemoContainer>
                         </LocalizationProvider>

@@ -38,9 +38,9 @@ const CitiesSearch = ({ flightType }) => {
             let json = res.data.result;
             let filtered = json.filter(el => {
               if (flightType === "domestic") {
-                return el.label.toLowerCase().includes('россия')
+                return ( el.label.toLowerCase().includes('россия') )
               } else if (flightType === "international") {
-                return !(el.label.toLowerCase().includes('россия'))
+                return !( el.label.toLowerCase().includes('россия') )
               } else {
                 return true
               }
