@@ -53,7 +53,7 @@ const CitiesSearch = ({ flightType }) => {
           .finally(() => {
           });
       }, 400),
-    [],
+    [flightType],
   );
 
   React.useEffect(() => {

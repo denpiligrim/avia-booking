@@ -42,6 +42,7 @@ const TerminalsSearch = observer(() => {
                         let json = res.data.result;
                         callback(json);
                         setLoading(false);
+                        // http://api.travelpayouts.com/data/ru/airports.json
                     })
                     .catch(err => {
                     })
