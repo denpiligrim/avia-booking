@@ -22,6 +22,7 @@ const Checkout = () => {
   const [data, setData] = useState({});
   const [date, setDate] = useState(dayjs());
   const [time, setTime] = useState(dayjs());
+  const [additional, setAdditional] = useState([]);
   const [departureCity, setDepartureCity] = useState('');
   const [arrivalCity, setArrivalCity] = useState('');
   const [passengers, setPassengers] = useState([
@@ -127,6 +128,13 @@ const Checkout = () => {
             } else {
               setArrivalCity(city);
             }
+            let groupedObjects = localServiceInfo.priceGroup.additionalServices.reduce((acc, obj) => {
+              acc[obj.typeLabel] = acc[obj.typeLabel] || [];
+              acc[obj.typeLabel].push(obj);
+              return acc;
+            }, {});
+            const entries = Object.entries(groupedObjects);
+            console.log(entries);
           }
         })
         .catch(function (err) {
@@ -268,7 +276,26 @@ const Checkout = () => {
               </>
             ) : activeStep === 1 ? (
               <>
-                2
+                {additional.map(el => (
+                  <Accordion expanded={expanded === 'panel' + i} onChange={handleChange('panel' + i)}>
+                    <AccordionSummary
+                      expandIcon={<ExpandMoreIcon />}
+                      aria-controls={'panel' + i + '-content'}
+                      id={'panel' + i + '-content'}
+                    >
+                      <Typography sx={{ width: '33%', flexShrink: 0 }}>
+                        {el[0]}
+                      </Typography>
+                      <Typography sx={{ color: 'text.secondary' }}>{el[1].description}</Typography>
+                    </AccordionSummary>
+                    <AccordionDetails>
+                      <Typography>
+                        Nulla facilisi. Phasellus sollicitudin nulla et quam mattis feugiat.
+                        Aliquam eget maximus est, id dignissim quam.
+                      </Typography>
+                    </AccordionDetails>
+                  </Accordion>
+                ))}
               </>
             ) : (
               <>
