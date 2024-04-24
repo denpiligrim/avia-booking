@@ -27,7 +27,8 @@ const Checkout = () => {
   const [departureCity, setDepartureCity] = useState('');
   const [arrivalCity, setArrivalCity] = useState('');
   const [expanded, setExpanded] = useState(false);
-  const [checked, setChecked] = useState([0]);
+  const [checked, setChecked] = useState([]);
+  const [guests, setGuests] = useState([]);
   const [passengers, setPassengers] = useState([
     {
       firstName: '',
@@ -107,6 +108,35 @@ const Checkout = () => {
     setPassengers([...newArr]);
   }
 
+  const changeGuestName = (i, val) => {
+    const newArr = [...guests];
+    const value = val.trim();
+    newArr[i].firstName = value.slice(0, 1).toUpperCase() + value.slice(1);
+    setGuests([...newArr]);
+  }
+
+  const changeGuestLastName = (i, val) => {
+    const newArr = [...guests];
+    const value = val.trim();
+    newArr[i].lastName = value.slice(0, 1).toUpperCase() + value.slice(1);
+    setGuests([...newArr]);
+  }
+
+  const addGuest = () => {
+    const newArr = [...guests];
+    newArr.push({
+      firstName: '',
+      lastName: ''
+    });
+    setGuests([...newArr]);
+  }
+
+  const removeGuest = (i) => {
+    const newArr = [...guests];
+    newArr.splice(i, 1);
+    setGuests([...newArr]);
+  }
+
   const changeDepartureCity = (e) => {
     setDepartureCity(e.target.value);
   }
@@ -117,13 +147,21 @@ const Checkout = () => {
 
   const accordion = (panel) => (event, isExpanded) => {
     setExpanded(isExpanded ? panel : false);
-  };  
+  };
 
   const handleToggle = (value, index) => () => {
     const currentIndex = checked.indexOf(value);
-    const newChecked = [...checked];    
+    const newChecked = [...checked];
 
     if (currentIndex === -1) {
+      let indexRemove = null;
+      additional[index][1].forEach((el) => {
+        const i = checked.indexOf(el);
+        if (i !== -1) {
+          indexRemove = i;
+        }
+      });
+      if (indexRemove !== -1 && indexRemove !== null) newChecked.splice(indexRemove, 1);
       newChecked.push(value);
     } else {
       newChecked.splice(currentIndex, 1);
@@ -170,8 +208,13 @@ const Checkout = () => {
     passengers.forEach(el => {
       sum += localServiceInfo.priceGroup.passengerCategories[el.passengerCategory].price.value;
     });
+    if (checked.length > 0) {
+      checked.forEach(el => {
+        sum += el.price.value;
+      });
+    }
     setTotalPrice(sum);
-  }, [passengers])
+  }, [passengers, checked])
 
   return (
     <Grid item xs={12}>
@@ -254,7 +297,7 @@ const Checkout = () => {
                         }
                       }}
                     >
-                      <ToggleButton value="2">Взрослый</ToggleButton>
+                      <ToggleButton value="2">Взрослый 12+</ToggleButton>
                       <ToggleButton value="1">Ребенок 2-12 лет</ToggleButton>
                       <ToggleButton value="0">Ребенок до 2 лет</ToggleButton>
                     </ToggleButtonGroup>
@@ -345,6 +388,30 @@ const Checkout = () => {
                   </Accordion>
                 ))}
                 <Typography variant="h6" component="p" sx={{ color: 'white', mt: 3 }} gutterBottom>Сопровождающие</Typography>
+                {guests.map((el, i) => (
+                  <Box key={'pass-' + i} sx={{
+                    borderLeft: '2px solid #3483fa',
+                    borderRadius: '4px',
+                    p: 2,
+                    mt: i !== 0 ? 1 : 0,
+                    position: 'relative'
+                  }}>
+                    <Stack direction="row" spacing={2} divider={<Divider sx={{ color: 'primary.main' }} />}>
+                      <TextField value={el.firstName} placeholder="Имя" variant="outlined" onChange={(e) => changeGuestName(i, e.target.value)} />
+                      <TextField value={el.lastName} placeholder="Фамилия" variant="outlined" onChange={(e) => changeGuestLastName(i, e.target.value)} />
+                    </Stack>
+                      <IconButton color="primary" aria-label="remove pass" onClick={() => removeGuest(i)} sx={{
+                        position: 'absolute',
+                        top: -17,
+                        right: 0
+                      }}>
+                        <CloseIcon />
+                      </IconButton>
+                  </Box>
+                ))}
+                <Button variant="contained" startIcon={<AddIcon />} onClick={addGuest}>
+                Добавить сопровождающего
+                </Button>
                 <Typography variant="h6" component="p" sx={{ color: 'white', mt: 3 }} gutterBottom>Автомобили</Typography>
               </>
             ) : (
