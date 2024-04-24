@@ -1,8 +1,9 @@
 import React, { useEffect } from 'react'
-import { Grid, Stepper, Step, StepLabel, Button, Box, Typography, TextField, Stack, Divider, ToggleButtonGroup, ToggleButton, IconButton } from '@mui/material';
+import { Grid, Stepper, Step, StepLabel, Button, Box, Typography, TextField, Stack, Divider, ToggleButtonGroup, ToggleButton, IconButton, Accordion, AccordionSummary, AccordionDetails, List, ListItem, ListItemButton, ListItemIcon, ListItemText, Checkbox } from '@mui/material';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import AddIcon from '@mui/icons-material/Add';
 import CloseIcon from '@mui/icons-material/Close';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
@@ -25,6 +26,8 @@ const Checkout = () => {
   const [additional, setAdditional] = useState([]);
   const [departureCity, setDepartureCity] = useState('');
   const [arrivalCity, setArrivalCity] = useState('');
+  const [expanded, setExpanded] = useState(false);
+  const [checked, setChecked] = useState([0]);
   const [passengers, setPassengers] = useState([
     {
       firstName: '',
@@ -112,6 +115,23 @@ const Checkout = () => {
     setArrivalCity(e.target.value);
   }
 
+  const accordion = (panel) => (event, isExpanded) => {
+    setExpanded(isExpanded ? panel : false);
+  };  
+
+  const handleToggle = (value, index) => () => {
+    const currentIndex = checked.indexOf(value);
+    const newChecked = [...checked];    
+
+    if (currentIndex === -1) {
+      newChecked.push(value);
+    } else {
+      newChecked.splice(currentIndex, 1);
+    }
+
+    setChecked(newChecked);
+  };
+
   useEffect(() => {
     const localServiceInfo = JSON.parse(localStorage.getItem('order'));
     setServiceInfo({ ...localServiceInfo });
@@ -134,6 +154,7 @@ const Checkout = () => {
               return acc;
             }, {});
             const entries = Object.entries(groupedObjects);
+            setAdditional(entries);
             console.log(entries);
           }
         })
@@ -276,26 +297,55 @@ const Checkout = () => {
               </>
             ) : activeStep === 1 ? (
               <>
-                {additional.map(el => (
-                  <Accordion expanded={expanded === 'panel' + i} onChange={handleChange('panel' + i)}>
+                <Typography variant="h6" component="p" sx={{ color: 'white', mt: 3 }} gutterBottom>Дополнительные услуги</Typography>
+                {additional.map((el, index) => (
+                  <Accordion key={'panel' + index} expanded={el[1].some(elem => checked.includes(elem)) || expanded === 'panel' + index} onChange={accordion('panel' + index)}>
                     <AccordionSummary
                       expandIcon={<ExpandMoreIcon />}
-                      aria-controls={'panel' + i + '-content'}
-                      id={'panel' + i + '-content'}
+                      aria-controls={'panel' + index + '-content'}
+                      id={'panel' + index + '-content'}
                     >
                       <Typography sx={{ width: '33%', flexShrink: 0 }}>
                         {el[0]}
                       </Typography>
-                      <Typography sx={{ color: 'text.secondary' }}>{el[1].description}</Typography>
+                      <Typography sx={{ color: 'text.secondary' }}>{el[1][0].description}</Typography>
                     </AccordionSummary>
-                    <AccordionDetails>
-                      <Typography>
-                        Nulla facilisi. Phasellus sollicitudin nulla et quam mattis feugiat.
-                        Aliquam eget maximus est, id dignissim quam.
-                      </Typography>
+                    <AccordionDetails sx={{ p: 0 }}>
+                      <List sx={{ width: '100%', bgcolor: 'background.paper' }}>
+                        {el[1].map((el, i) => {
+                          const labelId = `checkbox-list-label-${i}`;
+
+                          return (
+                            <ListItem
+                              key={i}
+                              secondaryAction={
+                                <>
+                                  {el.price.value.toString().replace(/(\d)(?=(\d{3})+(\D|$))/g, '$1 ') + ' ₽'}
+                                </>
+                              }
+                              disablePadding
+                            >
+                              <ListItemButton role={undefined} onClick={handleToggle(el, index)} dense>
+                                <ListItemIcon>
+                                  <Checkbox
+                                    edge="start"
+                                    checked={checked.indexOf(el) !== -1}
+                                    tabIndex={-1}
+                                    disableRipple
+                                    inputProps={{ 'aria-labelledby': labelId }}
+                                  />
+                                </ListItemIcon>
+                                <ListItemText id={labelId} primary={el.name} />
+                              </ListItemButton>
+                            </ListItem>
+                          );
+                        })}
+                      </List>
                     </AccordionDetails>
                   </Accordion>
                 ))}
+                <Typography variant="h6" component="p" sx={{ color: 'white', mt: 3 }} gutterBottom>Сопровождающие</Typography>
+                <Typography variant="h6" component="p" sx={{ color: 'white', mt: 3 }} gutterBottom>Автомобили</Typography>
               </>
             ) : (
               <>
