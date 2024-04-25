@@ -88,4 +88,20 @@ class VipZalController extends Controller
             return $this->apiError($response->json());
         }
     }
+
+    public function airports()
+    {
+        $response = Http::acceptJson()
+        ->get('http://api.travelpayouts.com/data/ru/airports.json');
+        if ($response->ok()) {
+            $response = $response->json();
+            $result = array(
+                "status" => true,
+                "result" => $response
+            );
+            return json_encode($result);
+        } else {
+            return $this->apiError($response->json());
+        }
+    }
 }

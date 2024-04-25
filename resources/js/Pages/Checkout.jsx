@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react'
-import { Grid, Stepper, Step, StepLabel, Button, Box, Typography, TextField, Stack, Divider, ToggleButtonGroup, ToggleButton, IconButton, Accordion, AccordionSummary, AccordionDetails, List, ListItem, ListItemButton, ListItemIcon, ListItemText, Checkbox } from '@mui/material';
+import { Grid, Stepper, Step, StepLabel, Button, Box, Typography, TextField, Stack, Divider, ToggleButtonGroup, ToggleButton, IconButton, Accordion, AccordionSummary, AccordionDetails, List, ListItem, ListItemButton, ListItemIcon, ListItemText, Checkbox, FormControlLabel } from '@mui/material';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import AddIcon from '@mui/icons-material/Add';
 import CloseIcon from '@mui/icons-material/Close';
@@ -29,6 +29,7 @@ const Checkout = () => {
   const [expanded, setExpanded] = useState(false);
   const [checked, setChecked] = useState([]);
   const [guests, setGuests] = useState([]);
+  const [cars, setCars] = useState([]);
   const [passengers, setPassengers] = useState([
     {
       firstName: '',
@@ -135,6 +136,42 @@ const Checkout = () => {
     const newArr = [...guests];
     newArr.splice(i, 1);
     setGuests([...newArr]);
+  }
+
+  const changeCarNumber = (i, val) => {
+    const newArr = [...cars];
+    const value = val.trim();
+    newArr[i].number = value.toUpperCase();
+    setCars([...newArr]);
+  }
+
+  const changeCarModel = (i, val) => {
+    const newArr = [...cars];
+    const value = val.trim();
+    newArr[i].model = value;
+    setCars([...newArr]);
+  }
+
+  const addCar = () => {
+    const newArr = [...cars];
+    newArr.push({
+      number: '',
+      model: '',
+      later: false
+    });
+    setCars([...newArr]);
+  }
+
+  const removeCar = (i) => {
+    const newArr = [...cars];
+    newArr.splice(i, 1);
+    setCars([...newArr]);
+  }
+
+  const changeCarLater = (i) => {
+    const newArr = [...cars];
+    newArr[i].later = !newArr[i].later;
+    setCars([...newArr]);
   }
 
   const changeDepartureCity = (e) => {
@@ -340,58 +377,64 @@ const Checkout = () => {
               </>
             ) : activeStep === 1 ? (
               <>
-                <Typography variant="h6" component="p" sx={{ color: 'white', mt: 3 }} gutterBottom>Дополнительные услуги</Typography>
-                {additional.map((el, index) => (
-                  <Accordion key={'panel' + index} expanded={el[1].some(elem => checked.includes(elem)) || expanded === 'panel' + index} onChange={accordion('panel' + index)}>
-                    <AccordionSummary
-                      expandIcon={<ExpandMoreIcon />}
-                      aria-controls={'panel' + index + '-content'}
-                      id={'panel' + index + '-content'}
-                    >
-                      <Typography sx={{ width: '33%', flexShrink: 0 }}>
-                        {el[0]}
-                      </Typography>
-                      <Typography sx={{ color: 'text.secondary' }}>{el[1][0].description}</Typography>
-                    </AccordionSummary>
-                    <AccordionDetails sx={{ p: 0 }}>
-                      <List sx={{ width: '100%', bgcolor: 'background.paper' }}>
-                        {el[1].map((el, i) => {
-                          const labelId = `checkbox-list-label-${i}`;
+                {additional.length > 0 && (
+                  <>
+                    <Typography variant="h6" component="p" sx={{ color: 'white', mt: 3 }} gutterBottom>Дополнительные услуги</Typography>
+                    {additional.map((el, index) => (
+                      <Accordion key={'panel' + index} expanded={el[1].some(elem => checked.includes(elem)) || expanded === 'panel' + index} onChange={accordion('panel' + index)}>
+                        <AccordionSummary
+                          expandIcon={<ExpandMoreIcon />}
+                          aria-controls={'panel' + index + '-content'}
+                          id={'panel' + index + '-content'}
+                        >
+                          <Typography sx={{ width: '33%', flexShrink: 0 }}>
+                            {el[0]}
+                          </Typography>
+                          <Typography sx={{ color: 'text.secondary' }}>{el[1][0].description}</Typography>
+                        </AccordionSummary>
+                        <AccordionDetails sx={{ p: 0 }}>
+                          <List sx={{ width: '100%', bgcolor: 'background.paper' }}>
+                            {el[1].map((el, i) => {
+                              const labelId = `checkbox-list-label-${i}`;
 
-                          return (
-                            <ListItem
-                              key={i}
-                              secondaryAction={
-                                <>
-                                  {el.price.value.toString().replace(/(\d)(?=(\d{3})+(\D|$))/g, '$1 ') + ' ₽'}
-                                </>
-                              }
-                              disablePadding
-                            >
-                              <ListItemButton role={undefined} onClick={handleToggle(el, index)} dense>
-                                <ListItemIcon>
-                                  <Checkbox
-                                    edge="start"
-                                    checked={checked.indexOf(el) !== -1}
-                                    tabIndex={-1}
-                                    disableRipple
-                                    inputProps={{ 'aria-labelledby': labelId }}
-                                  />
-                                </ListItemIcon>
-                                <ListItemText id={labelId} primary={el.name} />
-                              </ListItemButton>
-                            </ListItem>
-                          );
-                        })}
-                      </List>
-                    </AccordionDetails>
-                  </Accordion>
-                ))}
+                              return (
+                                <ListItem
+                                  key={i}
+                                  secondaryAction={
+                                    <>
+                                      {el.price.value.toString().replace(/(\d)(?=(\d{3})+(\D|$))/g, '$1 ') + ' ₽'}
+                                    </>
+                                  }
+                                  disablePadding
+                                >
+                                  <ListItemButton role={undefined} onClick={handleToggle(el, index)} dense>
+                                    <ListItemIcon>
+                                      <Checkbox
+                                        edge="start"
+                                        checked={checked.indexOf(el) !== -1}
+                                        tabIndex={-1}
+                                        disableRipple
+                                        inputProps={{ 'aria-labelledby': labelId }}
+                                      />
+                                    </ListItemIcon>
+                                    <ListItemText id={labelId} primary={el.name} />
+                                  </ListItemButton>
+                                </ListItem>
+                              );
+                            })}
+                          </List>
+                        </AccordionDetails>
+                      </Accordion>
+                    ))}
+                  </>
+                )}
                 <Typography variant="h6" component="p" sx={{ color: 'white', mt: 3 }} gutterBottom>Сопровождающие</Typography>
+                <Typography variant="body2" component="p" sx={{ color: 'white' }}>Это те, кто не летит, но будут в ВИП-зале вместе с вами.</Typography>
                 {guests.map((el, i) => (
                   <Box key={'pass-' + i} sx={{
                     borderLeft: '2px solid #3483fa',
                     borderRadius: '4px',
+                    display: 'inline-block',
                     p: 2,
                     mt: i !== 0 ? 1 : 0,
                     position: 'relative'
@@ -400,19 +443,53 @@ const Checkout = () => {
                       <TextField value={el.firstName} placeholder="Имя" variant="outlined" onChange={(e) => changeGuestName(i, e.target.value)} />
                       <TextField value={el.lastName} placeholder="Фамилия" variant="outlined" onChange={(e) => changeGuestLastName(i, e.target.value)} />
                     </Stack>
-                      <IconButton color="primary" aria-label="remove pass" onClick={() => removeGuest(i)} sx={{
-                        position: 'absolute',
-                        top: -17,
-                        right: 0
-                      }}>
-                        <CloseIcon />
-                      </IconButton>
+                    <IconButton color="primary" aria-label="remove pass" onClick={() => removeGuest(i)} sx={{
+                      position: 'absolute',
+                      top: -17,
+                      right: 0
+                    }}>
+                      <CloseIcon />
+                    </IconButton>
                   </Box>
                 ))}
-                <Button variant="contained" startIcon={<AddIcon />} onClick={addGuest}>
-                Добавить сопровождающего
+                <br />
+                <Button sx={{ mt: 2 }} variant="contained" startIcon={<AddIcon />} onClick={addGuest}>
+                  Добавить сопровождающего
                 </Button>
                 <Typography variant="h6" component="p" sx={{ color: 'white', mt: 3 }} gutterBottom>Автомобили</Typography>
+                <Typography variant="body2" component="p" sx={{ color: 'white' }}>Для того, чтобы автомобиль пропустили на парковку аэропорта, нужно сообщить данные. Вы можете сделать это позже.</Typography>
+                {cars.map((el, i) => (
+                  <Box key={'pass-' + i} sx={{
+                    borderLeft: '2px solid #3483fa',
+                    borderRadius: '4px',
+                    display: 'inline-block',
+                    p: 2,
+                    mt: i !== 0 ? 1 : 0,
+                    position: 'relative'
+                  }}>
+                    <Stack direction="row" spacing={2} divider={<Divider sx={{ color: 'primary.main' }} />}>
+                      <TextField disabled={el.later ? true : false} value={el.later ? '' : el.number} placeholder="Гос. номер" variant="outlined" onChange={(e) => changeCarNumber(i, e.target.value)} />
+                      <TextField disabled={el.later ? true : false} value={el.later ? '' : el.model} placeholder="Марка автомобиля" variant="outlined" onChange={(e) => changeCarModel(i, e.target.value)} />
+                    </Stack>
+                    <FormControlLabel sx={{
+                      color: 'white',
+                      "& span:not(.Mui-checked) .MuiSvgIcon-root": {
+                        fill: 'white'
+                      }
+                    }} control={<Checkbox checked={el.later} onClick={() => changeCarLater(i)} />} label="Сообщить позже" />
+                    <IconButton color="primary" aria-label="remove pass" onClick={() => removeCar(i)} sx={{
+                      position: 'absolute',
+                      top: -17,
+                      right: 0
+                    }}>
+                      <CloseIcon />
+                    </IconButton>
+                  </Box>
+                ))}
+                <br />
+                <Button sx={{ mt: 2 }} variant="contained" startIcon={<AddIcon />} onClick={addCar}>
+                  Добавить автомобиль
+                </Button>
               </>
             ) : (
               <>
