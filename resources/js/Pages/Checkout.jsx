@@ -429,7 +429,7 @@ const Checkout = () => {
                   </>
                 )}
                 <Typography variant="h6" component="p" sx={{ color: 'white', mt: 3 }} gutterBottom>Сопровождающие</Typography>
-                <Typography variant="body2" component="p" sx={{ color: 'white' }}>Это те, кто не летит, но будут в ВИП-зале вместе с вами.</Typography>
+                <Typography variant="body2" component="p" sx={{ color: 'white' }} gutterBottom>Это те, кто не летит, но будут в ВИП-зале вместе с вами.</Typography>
                 {guests.map((el, i) => (
                   <Box key={'pass-' + i} sx={{
                     borderLeft: '2px solid #3483fa',
@@ -457,7 +457,7 @@ const Checkout = () => {
                   Добавить сопровождающего
                 </Button>
                 <Typography variant="h6" component="p" sx={{ color: 'white', mt: 3 }} gutterBottom>Автомобили</Typography>
-                <Typography variant="body2" component="p" sx={{ color: 'white' }}>Для того, чтобы автомобиль пропустили на парковку аэропорта, нужно сообщить данные. Вы можете сделать это позже.</Typography>
+                <Typography variant="body2" component="p" sx={{ color: 'white' }} gutterBottom>Для того, чтобы автомобиль пропустили на парковку аэропорта, нужно сообщить данные. Вы можете сделать это позже.</Typography>
                 {cars.map((el, i) => (
                   <Box key={'pass-' + i} sx={{
                     borderLeft: '2px solid #3483fa',

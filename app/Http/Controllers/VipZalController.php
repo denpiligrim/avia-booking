@@ -90,15 +90,49 @@ class VipZalController extends Controller
     }
 
     public function airports()
-    {
+    {        
+        // $countries = Http::acceptJson()
+        // ->get('http://api.travelpayouts.com/data/ru/countries.json');
+        // $cities = Http::acceptJson()
+        // ->get('http://api.travelpayouts.com/data/ru/cities.json');
         $response = Http::acceptJson()
         ->get('http://api.travelpayouts.com/data/ru/airports.json');
         if ($response->ok()) {
             $response = $response->json();
+            $response = array_filter($response, function ($element)
+            {
+                return $element["iata_type"] === "airport";
+            });
+            print_r(count($response));
+            // $resCountries = $countries->json();
+            // $resCities = $cities->json();
             $result = array(
                 "status" => true,
                 "result" => $response
             );
+            // foreach ($response as $object) {
+            //     $country = "";
+            //     foreach ($resCountries as $objCountry) {
+            //         if ($object['country_code'] === $objCountry['code']) {
+            //             $country = $objCountry['name'] ? $objCountry['name'] : '';
+            //             break;
+            //         }
+            //     }
+            //     $city = "";
+            //     foreach ($resCities as $objCity) {
+            //         if ($object['city_code'] === $objCity['code']) {
+            //             $city = $objCity['name'] ? $objCity['name'] : '';
+            //             break;
+            //         }
+            //     }
+            //     $label = ($country && $city) ? $country . ', ' . $city : $country . $city;;
+            //     DB::table('airports')->insert([
+            //         'countryCode' => $object['country_code'],
+            //         'iata' => $object['code'],
+            //         'label' => $label,
+            //         'name' => $object['name'] ? $object['name'] : ''
+            //     ]);
+            // }
             return json_encode($result);
         } else {
             return $this->apiError($response->json());
