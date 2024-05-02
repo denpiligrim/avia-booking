@@ -53,18 +53,18 @@ const TerminalsSearch = observer(() => {
         [],
     );
 
-    React.useEffect(() => {
-        axios.get('/api/airports')
-        .then((res) => {
-          if (res.data.status) {
-            const data = res.data.result;
-            setAllAirports(data);            
-          }
-        })
-        .catch(function (err) {
-          console.log(err);
-        });
-    }, []);
+    // React.useEffect(() => {
+    //     axios.get('/api/airports')
+    //     .then((res) => {
+    //       if (res.data.status) {
+    //         const data = res.data.result;
+    //         setAllAirports(data);            
+    //       }
+    //     })
+    //     .catch(function (err) {
+    //       console.log(err);
+    //     });
+    // }, []);
 
     React.useEffect(() => {
         let active = true;
