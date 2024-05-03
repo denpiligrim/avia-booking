@@ -39,27 +39,37 @@ class VipZalController extends Controller
       ]);
     if ($response->ok()) {
       $response = $response->json();
-      // $airportsDB = DB::table('airports')
-      //   ->where('name', 'LIKE', '%' . $term . '%')
-      //   ->orWhere('iata', 'LIKE', '%' . $term . '%')
-      //   ->get()
-      //   ->toArray();
-      //   dd($response);
-      //   dd($airportsDB);
-      // $combinedAirports = array_merge($response, $airportsDB);
+      $airportsDB = DB::table('airports')
+        ->where('name', 'LIKE', '%' . $term . '%')
+        ->orWhere('iata', 'LIKE', '%' . $term . '%')
+        ->get()
+        ->toArray();
+      $airportsDB = json_decode(json_encode($airportsDB), true);
+      $combinedAirports = array_merge($airportsDB, $response);
 
-      // // Remove elements where the "iata" values are equal
-      // $filteredAirports = [];
-      // $iataList = [];
-      // foreach ($combinedAirports as $airport) {
-      //   if (!in_array($airport["iata"], $iataList)) {
-      //     $iataList[] = $airport["iata"];
-      //     $filteredAirports[] = $airport;
-      //   }
-      // }
+      $filteredAirports = [];
+      $iataList = [];
+      foreach ($combinedAirports as $airport) {
+        if (!in_array($airport["iata"], $iataList)) {
+          $iataList[] = $airport["iata"];
+          $filteredAirports[] = $airport;
+        }
+      }
+      usort($filteredAirports, function ($a, $b) {
+        global $term;
+
+        $countA = substr_count(strtolower($a['name']), strtolower($term));
+        $countB = substr_count(strtolower($b['name']), strtolower($term));
+    
+        // Compare the occurrence counts
+        if ($countA == $countB) {
+            return 0;
+        }
+        return ($countA < $countB) ? 1 : -1;
+    });
       $result = array(
         "status" => true,
-        "result" => $response
+        "result" => $filteredAirports
       );
       return json_encode($result);
     } else {
