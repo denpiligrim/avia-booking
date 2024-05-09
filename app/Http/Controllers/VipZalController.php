@@ -55,18 +55,22 @@ class VipZalController extends Controller
           $filteredAirports[] = $airport;
         }
       }
-      usort($filteredAirports, function ($a, $b) {
-        global $term;
-
-        $countA = substr_count(strtolower($a['name']), strtolower($term));
-        $countB = substr_count(strtolower($b['name']), strtolower($term));
+    //   usort($filteredAirports, function ($a, $b) {
+    //     global $term;
     
-        // Compare the occurrence counts
-        if ($countA == $countB) {
-            return 0;
-        }
-        return ($countA < $countB) ? 1 : -1;
-    });
+    //     $posA = stripos(strtolower($a["name"]), strtolower($term));
+    //     $posB = stripos(strtolower($b["name"]), strtolower($term));
+    
+    //     if ($posA !== false && $posB !== false) {
+    //         return $posA - $posB;
+    //     } elseif ($posA !== false) {
+    //         return -1;
+    //     } elseif ($posB !== false) {
+    //         return 1;
+    //     } else {
+    //         return 0;
+    //     }
+    // });
       $result = array(
         "status" => true,
         "result" => $filteredAirports
@@ -117,52 +121,51 @@ class VipZalController extends Controller
     }
   }
 
-  public function airports()
-  {
-    // $countries = Http::acceptJson()
-    // ->get('http://api.travelpayouts.com/data/ru/countries.json');
-    // $cities = Http::acceptJson()
-    // ->get('http://api.travelpayouts.com/data/ru/cities.json');
-    $response = Http::acceptJson()
-      ->get('http://api.travelpayouts.com/data/ru/airports.json');
-    if ($response->ok()) {
-      $response = $response->json();
-      $response = array_filter($response, function ($element) {
-        return $element["iata_type"] === "airport";
-      });
-      print_r(count($response));
-      // $resCountries = $countries->json();
-      // $resCities = $cities->json();
-      $result = array(
-        "status" => true,
-        "result" => $response
-      );
-      // foreach ($response as $object) {
-      //     $country = "";
-      //     foreach ($resCountries as $objCountry) {
-      //         if ($object['country_code'] === $objCountry['code']) {
-      //             $country = $objCountry['name'] ? $objCountry['name'] : '';
-      //             break;
-      //         }
-      //     }
-      //     $city = "";
-      //     foreach ($resCities as $objCity) {
-      //         if ($object['city_code'] === $objCity['code']) {
-      //             $city = $objCity['name'] ? $objCity['name'] : '';
-      //             break;
-      //         }
-      //     }
-      //     $label = ($country && $city) ? $country . ', ' . $city : $country . $city;;
-      //     DB::table('airports')->insert([
-      //         'countryCode' => $object['country_code'],
-      //         'iata' => $object['code'],
-      //         'label' => $label,
-      //         'name' => $object['name'] ? $object['name'] : ''
-      //     ]);
-      // }
-      return json_encode($result);
-    } else {
-      return $this->apiError($response->json());
-    }
-  }
+  // public function airports()
+  // {
+  //   $countries = Http::acceptJson()
+  //   ->get('http://api.travelpayouts.com/data/ru/countries.json');
+  //   $cities = Http::acceptJson()
+  //   ->get('http://api.travelpayouts.com/data/ru/cities.json');
+  //   $response = Http::acceptJson()
+  //     ->get('http://api.travelpayouts.com/data/ru/airports.json');
+  //   if ($response->ok()) {
+  //     $response = $response->json();
+  //     $response = array_filter($response, function ($element) {
+  //       return $element["iata_type"] === "airport";
+  //     });
+  //     $resCountries = $countries->json();
+  //     $resCities = $cities->json();
+  //     $result = array(
+  //       "status" => true,
+  //       "result" => $response
+  //     );
+  //     foreach ($response as $object) {
+  //         $country = "";
+  //         foreach ($resCountries as $objCountry) {
+  //             if ($object['country_code'] === $objCountry['code']) {
+  //                 $country = $objCountry['name'] ? $objCountry['name'] : '';
+  //                 break;
+  //             }
+  //         }
+  //         $city = "";
+  //         foreach ($resCities as $objCity) {
+  //             if ($object['city_code'] === $objCity['code']) {
+  //                 $city = $objCity['name'] ? $objCity['name'] : '';
+  //                 break;
+  //             }
+  //         }
+  //         $label = ($country && $city) ? $country . ', ' . $city : $country . $city;
+  //         DB::table('airports')->insert([
+  //             'countryCode' => $object['country_code'],
+  //             'iata' => $object['code'],
+  //             'label' => $label,
+  //             'name' => $object['name'] ? $object['name'] : $city
+  //         ]);
+  //     }
+  //     return json_encode($result);
+  //   } else {
+  //     return $this->apiError($response->json());
+  //   }
+  // }
 }
