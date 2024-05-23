@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react'
 import { Grid, Stepper, Step, StepLabel, Button, Box, Typography, TextField, Stack, Divider, ToggleButtonGroup, ToggleButton, IconButton, Accordion, AccordionSummary, AccordionDetails, List, ListItem, ListItemButton, ListItemIcon, ListItemText, Checkbox, FormControlLabel } from '@mui/material';
+import TextareaAutosize from "react-autosize-textarea";
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import AddIcon from '@mui/icons-material/Add';
 import CloseIcon from '@mui/icons-material/Close';
@@ -30,6 +31,11 @@ const Checkout = () => {
   const [checked, setChecked] = useState([]);
   const [guests, setGuests] = useState([]);
   const [cars, setCars] = useState([]);
+  const [person, setPerson] = useState("pp");
+  const [name, setClientName] = useState("");
+  const [phone, setClientPhone] = useState("");
+  const [email, setClientEmail] = useState("");
+  const [comment, setComment] = useState("");
   const [passengers, setPassengers] = useState([
     {
       firstName: '',
@@ -180,6 +186,30 @@ const Checkout = () => {
 
   const changeArrivalCity = (e) => {
     setArrivalCity(e.target.value);
+  }
+
+  const changePerson = (val) => {
+    setPerson(val);
+  }
+
+  const changeClientName = (val) => {
+    let value = val.trim();
+    value = value.slice(0, 1).toUpperCase() + value.slice(1);
+    setClientName(value);
+  }
+
+  const changeClientPhone = (val) => {
+    const value = val.trim();
+    setClientPhone(value);
+  }
+
+  const changeClientEmail = (val) => {
+    const value = val.trim();
+    setClientEmail(value);
+  }
+
+  const changeComment= (val) => {
+    setComment(val);
   }
 
   const accordion = (panel) => (event, isExpanded) => {
@@ -493,7 +523,50 @@ const Checkout = () => {
               </>
             ) : (
               <>
-                3
+                <Typography variant="h6" component="p" sx={{ color: 'white', mt: 3 }} gutterBottom>Контактная информация</Typography>
+                <ToggleButtonGroup
+                  color="primary"
+                  value={person}
+                  exclusive
+                  onChange={(e, val) => changePerson(val)}
+                  aria-label="Platform"
+                  sx={{
+                    mt: 1,
+                    "& .MuiButtonBase-root:not(.Mui-selected)": {
+                      color: 'rgba(255, 255, 255, 0.54)'
+                    }
+                  }}
+                >
+                  <ToggleButton value="pp">Физическое лицо</ToggleButton>
+                  <ToggleButton value="le">Юридическое лицо</ToggleButton>
+                </ToggleButtonGroup>
+                {person === "pp" ? (
+                  <>
+                    <TextField value={name} placeholder="Имя" variant="outlined" onChange={(e) => changeClientName(e.target.value)} />
+                    <TextField value={phone} placeholder="Телефон" variant="outlined" onChange={(e) => changeClientPhone(e.target.value)} />
+                    <TextField value={email} placeholder="Email" variant="outlined" onChange={(e) => changeClientEmail(e.target.value)} />
+                  </>
+                ) : (
+                  <>
+                  </>
+                )}
+                <Typography variant="h6" component="p" sx={{ color: 'white', mt: 3 }} gutterBottom>Комментарий</Typography>
+                <TextareaAutosize
+                                rows={1}
+                                placeholder='Комментарий'
+                                value={comment}
+                                onChange={(event) => changeComment(event.target.value)}
+                                style={{
+                                    width: '100%',
+                                    lineHeight: '1.5',
+                                    padding: '16.5px 14px',
+                                    border: '1px solid #3483fa',
+                                    borderRadius: '4px',
+                                    fontFamily: 'Helvetica, sans-serif',
+                                    fontSize: '1rem'
+                                }}
+                            />
+
               </>
             )}
           </Box>
