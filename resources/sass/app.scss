@@ -26,3 +26,11 @@ body {
     opacity: 0.83;
     background-color: #0e172f;
 }
+
+textarea {
+  resize: none;
+}
+
+textarea:focus-visible {
+  outline: none;
+}

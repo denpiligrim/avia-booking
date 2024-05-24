@@ -24,6 +24,7 @@ const Checkout = () => {
   const [data, setData] = useState({});
   const [date, setDate] = useState(dayjs());
   const [time, setTime] = useState(dayjs());
+  const [flight, setFlight] = useState('');
   const [additional, setAdditional] = useState([]);
   const [departureCity, setDepartureCity] = useState('');
   const [arrivalCity, setArrivalCity] = useState('');
@@ -36,6 +37,7 @@ const Checkout = () => {
   const [phone, setClientPhone] = useState("");
   const [email, setClientEmail] = useState("");
   const [comment, setComment] = useState("");
+  const [final, setFinal] = useState(false);
   const [passengers, setPassengers] = useState([
     {
       firstName: '',
@@ -70,6 +72,11 @@ const Checkout = () => {
   const prevStep = () => {
     let currentIndex = activeStep;
     setActiveStep(--currentIndex);
+    setFinal(false);
+  };
+
+  const finalStep = () => {
+    setFinal(true);
   };
 
   const changePassCat = (i, val) => {
@@ -208,7 +215,7 @@ const Checkout = () => {
     setClientEmail(value);
   }
 
-  const changeComment= (val) => {
+  const changeComment = (val) => {
     setComment(val);
   }
 
@@ -325,7 +332,7 @@ const Checkout = () => {
                     />
                   </DemoContainer>
                 </LocalizationProvider>
-                <TextField id="outlined-basic" placeholder="Номер рейса" variant="outlined" sx={{ mt: 2 }} />
+                <TextField id="outlined-basic" placeholder="Номер рейса" value={flight} onChange={(e) => setFlight(e.target.value.trim())} variant="outlined" sx={{ mt: 2 }} />
                 <Stack direction="row" spacing={2} sx={{ mt: 2 }} divider={<ArrowForwardIcon sx={{ my: 'auto !important', color: 'primary.main' }} />}>
                   {serviceInfo.type === "departure" ? (
                     <TextField disabled={serviceInfo.type === "departure" ? true : false} value={departureCity} onChange={changeDepartureCity} placeholder="Город вылета" variant="outlined" />
@@ -523,6 +530,8 @@ const Checkout = () => {
               </>
             ) : (
               <>
+              {!final ? (
+                <>
                 <Typography variant="h6" component="p" sx={{ color: 'white', mt: 3 }} gutterBottom>Контактная информация</Typography>
                 <ToggleButtonGroup
                   color="primary"
@@ -540,43 +549,80 @@ const Checkout = () => {
                   <ToggleButton value="pp">Физическое лицо</ToggleButton>
                   <ToggleButton value="le">Юридическое лицо</ToggleButton>
                 </ToggleButtonGroup>
-                {person === "pp" ? (
+                {person === "le" && (
                   <>
-                    <TextField value={name} placeholder="Имя" variant="outlined" onChange={(e) => changeClientName(e.target.value)} />
-                    <TextField value={phone} placeholder="Телефон" variant="outlined" onChange={(e) => changeClientPhone(e.target.value)} />
-                    <TextField value={email} placeholder="Email" variant="outlined" onChange={(e) => changeClientEmail(e.target.value)} />
-                  </>
-                ) : (
-                  <>
+                  <Box></Box>                  
                   </>
                 )}
+                <Box><TextField value={name} placeholder="Имя" variant="outlined" onChange={(e) => changeClientName(e.target.value)} /></Box>
+                  <Box><TextField value={phone} placeholder="Телефон" variant="outlined" onChange={(e) => changeClientPhone(e.target.value)} /></Box>
+                  <Box><TextField value={email} placeholder="Email" variant="outlined" onChange={(e) => changeClientEmail(e.target.value)} /></Box>
                 <Typography variant="h6" component="p" sx={{ color: 'white', mt: 3 }} gutterBottom>Комментарий</Typography>
                 <TextareaAutosize
-                                rows={1}
-                                placeholder='Комментарий'
-                                value={comment}
-                                onChange={(event) => changeComment(event.target.value)}
-                                style={{
-                                    width: '100%',
-                                    lineHeight: '1.5',
-                                    padding: '16.5px 14px',
-                                    border: '1px solid #3483fa',
-                                    borderRadius: '4px',
-                                    fontFamily: 'Helvetica, sans-serif',
-                                    fontSize: '1rem'
-                                }}
-                            />
-
+                  rows={1}
+                  placeholder='Комментарий'
+                  value={comment}
+                  onChange={(event) => changeComment(event.target.value)}
+                  style={{
+                    width: '100%',
+                    lineHeight: '1.5',
+                    padding: '16.5px 14px',
+                    border: '1px solid #3483fa',
+                    borderRadius: '4px',
+                    fontFamily: 'Montserrat, sans-serif',
+                    fontSize: '1rem'
+                  }}
+                />
+                </>
+              ) : (
+                <Box sx={{background: 'white'}} p={2}> 
+                <Typography variant="h6" component="p" gutterBottom>Рейс</Typography>
+                <Typography variant="body1" component="p">Дата и время {serviceInfo.type === "departure" ? "вылета" : serviceInfo.type === "arrival" ? "прилета" : ""}</Typography>
+                <Typography variant="body2" component="p">{dayjs(date).format('DD.MM.YYYY') + " " + dayjs(time).format('HH:mm')}</Typography>                
+                <Typography variant="body1" component="p">Номер рейса и направление</Typography>
+                <Typography variant="body2" component="p">{flight}</Typography>
+                <Typography variant="body2" component="p">{departureCity + " - " + arrivalCity}</Typography>
+                <Typography variant="h6" component="p" gutterBottom>Пассажиры</Typography>
+                {passengers.map(el => (
+                  <>
+                  <Typography variant="body1" component="p">{el.firstName + " " + el.lastName}</Typography>
+                  <Typography variant="body1" component="p">{el.birthDate ? dayjs(el.birthDate).format('DD.MM.YYYY') : 'взрослый'}</Typography>
+                  </>
+                ))}
+                <Typography variant="h6" component="p" gutterBottom>Дополнительные услуги</Typography>
+                {additional.length > 0 && checked.length > 0 ? (
+                  <>
+                  {additional.map((el, i) => (
+                    <React.Fragment key={'label' + i}>
+                      <Typography variant="body1" component="p">{el[0]}</Typography>
+                      {el[1].map((el, index) => (
+                        <React.Fragment key={'label2' + index}>
+                          <Typography variant="body2" component="p">{el.name + ' ' + el.price.value.toString().replace(/(\d)(?=(\d{3})+(\D|$))/g, '$1 ') + ' ₽'}</Typography>
+                        </React.Fragment>                        
+                      ))}
+                    </React.Fragment>
+                  ))}
+                  </>
+                ) : (
+                  <Typography variant="body2" component="p">Нет</Typography>
+                )}
+                <Typography variant="body1" component="p"></Typography>
+                <Typography variant="body2" component="p"></Typography>
+                <Typography variant="body1" component="p"></Typography>
+                <Typography variant="body2" component="p"></Typography>
+                </Box>
+              )}
               </>
             )}
           </Box>
           <Box px={4}>
             <Typography variant="body2" component="p" sx={{ color: 'white' }} gutterBottom>Итоговая стоимость</Typography>
-            <Typography variant="h5" component="p" sx={{ color: 'white', mt: 3 }} gutterBottom>{totalPrice.toString().replace(/(\d)(?=(\d{3})+(\D|$))/g, '$1 ') + ' ₽'}</Typography>
+            <Typography variant="h5" component="p" sx={{ color: 'white', mt: 1 }} gutterBottom>{totalPrice.toString().replace(/(\d)(?=(\d{3})+(\D|$))/g, '$1 ') + ' ₽'}</Typography>
           </Box>
           <Box textAlign={'center'}>
             <Button variant="text" onClick={prevStep} sx={{ display: activeStep === 0 ? 'none' : 'inline-flex' }}>Назад</Button>
             <Button variant="contained" onClick={nextStep} sx={{ display: activeStep === 2 ? 'none' : 'inline-flex' }}>Вперед</Button>
+            <Button variant="contained" onClick={finalStep} sx={{ display: activeStep === 2 ? 'inline-flex' : 'none' }}>Подтвердить</Button>
           </Box>
         </Grid>
       </Grid>
@@ -584,4 +630,4 @@ const Checkout = () => {
   )
 }
 
-export default Checkout
+export default Checkout;
