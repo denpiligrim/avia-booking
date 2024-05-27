@@ -7,7 +7,7 @@ import axios from 'axios';
 
 const autocompleteService = { current: null };
 
-const CitiesSearch = ({ flightType }) => {
+const CitiesSearch = ({ flightType, val, changeVal  }) => {
 
   const [value, setValue] = React.useState(null);
   const [inputValue, setInputValue] = React.useState('');
@@ -128,6 +128,7 @@ const CitiesSearch = ({ flightType }) => {
       onChange={(event, newValue) => {
         setOptions(newValue ? [newValue, ...options] : options);
         setValue(newValue);
+        changeVal(newValue.label);
       }}
       onInputChange={(event, newInputValue) => {
         setInputValue(newInputValue);

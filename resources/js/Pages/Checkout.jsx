@@ -77,17 +77,17 @@ const Checkout = () => {
 
   const finalStep = () => {
     if (final) {
-      axios.post('/api/payment', {
+      // axios.post('/api/payment', {
 
-      })
-        .then(function (res) {
-          if (res.data.status) {
+      // })
+      //   .then(function (res) {
+      //     if (res.data.status) {
             
-          }
-        })
-        .catch(function (err) {
-          console.log(err);
-        });
+      //     }
+      //   })
+      //   .catch(function (err) {
+      //     console.log(err);
+      //   });
     }
     setFinal(true);
   };
@@ -350,12 +350,12 @@ const Checkout = () => {
                   {serviceInfo.type === "departure" ? (
                     <TextField disabled={serviceInfo.type === "departure" ? true : false} value={departureCity} onChange={changeDepartureCity} placeholder="Город вылета" variant="outlined" />
                   ) : (
-                    <CitiesSearch flightType={serviceInfo.flightType} />
+                    <CitiesSearch flightType={serviceInfo.flightType} val={departureCity} changeVal={setDepartureCity} />
                   )}
                   {serviceInfo.type === "arrival" ? (
                     <TextField disabled={serviceInfo.type === "arrival" ? true : false} value={arrivalCity} onChange={changeArrivalCity} placeholder="Город прилета" variant="outlined" />
                   ) : (
-                    <CitiesSearch flightType={serviceInfo.flightType} />
+                    <CitiesSearch flightType={serviceInfo.flightType} val={arrivalCity} changeVal={setArrivalCity} />
                   )}
                 </Stack>
                 <Typography variant="h6" component="p" sx={{ color: 'white', mt: 3 }} gutterBottom>Пассажиры</Typography>
@@ -594,7 +594,7 @@ const Checkout = () => {
                     <Typography variant="body2" component="p">{dayjs(date).format('DD.MM.YYYY') + " " + dayjs(time).format('HH:mm')}</Typography>
                     <Typography variant="body1" component="p">Номер рейса и направление</Typography>
                     <Typography variant="body2" component="p">{flight}</Typography>
-                    <Typography variant="body2" component="p">{departureCity + " - " + arrivalCity}</Typography>
+                    <Typography variant="body2" component="p">{departureCity + " — " + arrivalCity}</Typography>
                     <Typography variant="h6" component="p" gutterBottom>Пассажиры</Typography>
                     {passengers.map(el => (
                       <>
