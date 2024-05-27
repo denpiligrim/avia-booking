@@ -121,6 +121,58 @@ class VipZalController extends Controller
     }
   }
 
+  public function payment(Request $request)
+  {
+    $user="demo";
+$password="demo";
+$base64=base64_encode("$user:$password"); 
+$server_paykeeper="https://demo.paykeeper.ru";   
+
+$payment_data = array (
+  "pay_amount" => 42.50,
+  "clientid" => "Иванов Иван Иванович",
+  "orderid" => "Заказ № 10",
+  "client_email" => "test@example.com",
+  "service_name" => "Услуга",
+  "client_phone" => "8 (910) 123-45-67"
+  );
+  
+    $term = $request->input('term');
+    $response = Http::withToken($this->token)
+      ->acceptJson()
+      ->get($this->base_url . '/query/cities', [
+        'term' => $term,
+        'limit' => 10,
+        'lang' => 'ru'
+      ]);
+    if ($response->ok()) {
+      $response = $response->json();
+      $airportsDB = DB::table('airports')
+        ->where('name', 'LIKE', '%' . $term . '%')
+        ->orWhere('iata', 'LIKE', '%' . $term . '%')
+        ->get()
+        ->toArray();
+      $airportsDB = json_decode(json_encode($airportsDB), true);
+      $combinedAirports = array_merge($airportsDB, $response);
+
+      $filteredAirports = [];
+      $iataList = [];
+      foreach ($combinedAirports as $airport) {
+        if (!in_array($airport["iata"], $iataList)) {
+          $iataList[] = $airport["iata"];
+          $filteredAirports[] = $airport;
+        }
+      }
+      $result = array(
+        "status" => true,
+        "result" => $filteredAirports
+      );
+      return json_encode($result);
+    } else {
+      return $this->apiError($response->json());
+    }
+  }
+
   // public function airports()
   // {
   //   $countries = Http::acceptJson()

@@ -76,6 +76,19 @@ const Checkout = () => {
   };
 
   const finalStep = () => {
+    if (final) {
+      axios.post('/api/payment', {
+
+      })
+        .then(function (res) {
+          if (res.data.status) {
+            
+          }
+        })
+        .catch(function (err) {
+          console.log(err);
+        });
+    }
     setFinal(true);
   };
 
