@@ -337,12 +337,12 @@ const Checkout = () => {
                   {serviceInfo.type === "departure" ? (
                     <TextField disabled={serviceInfo.type === "departure" ? true : false} value={departureCity} onChange={changeDepartureCity} placeholder="Город вылета" variant="outlined" />
                   ) : (
-                    <CitiesSearch flightType={serviceInfo.flightType} val={} />
+                    <CitiesSearch flightType={serviceInfo.flightType} />
                   )}
                   {serviceInfo.type === "arrival" ? (
                     <TextField disabled={serviceInfo.type === "arrival" ? true : false} value={arrivalCity} onChange={changeArrivalCity} placeholder="Город прилета" variant="outlined" />
                   ) : (
-                    <CitiesSearch flightType={serviceInfo.flightType} val={} />
+                    <CitiesSearch flightType={serviceInfo.flightType} />
                   )}
                 </Stack>
                 <Typography variant="h6" component="p" sx={{ color: 'white', mt: 3 }} gutterBottom>Пассажиры</Typography>
@@ -637,7 +637,7 @@ const Checkout = () => {
           <Box textAlign={'center'}>
             <Button variant="text" onClick={prevStep} sx={{ display: activeStep === 0 ? 'none' : 'inline-flex' }}>Назад</Button>
             <Button variant="contained" onClick={nextStep} sx={{ display: activeStep === 2 ? 'none' : 'inline-flex' }}>Вперед</Button>
-            <Button variant="contained" onClick={finalStep} sx={{ display: activeStep === 2 ? 'inline-flex' : 'none' }}>Подтвердить</Button>
+            <Button variant="contained" onClick={finalStep} sx={{ display: activeStep === 2 ? 'inline-flex' : 'none' }}>{final ? 'К оплате' : 'Подтвердить'}</Button>
           </Box>
         </Grid>
       </Grid>

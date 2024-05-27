@@ -18,6 +18,7 @@ Route::get('/api/search', [VipZalController::class, 'search']);
 Route::get('/api/services', [VipZalController::class, 'services']);
 Route::get('/api/service', [VipZalController::class, 'service']);
 Route::get('/api/airports', [VipZalController::class, 'airports']);
+Route::get('/api/payment', [VipZalController::class, 'payment']);
 
 Route::view('/{path}', 'welcome', [])
     ->where('path', '.*');
