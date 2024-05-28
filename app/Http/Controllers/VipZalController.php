@@ -123,10 +123,10 @@ class VipZalController extends Controller
 
   public function payment(Request $request)
   {
-    $user="demo";
-$password="demo";
-$base64=base64_encode("$user:$password"); 
-$server_paykeeper="https://demo.paykeeper.ru";   
+    $user = "demo";
+$password = "demo";
+$base64 = base64_encode("$user:$password"); 
+$server_paykeeper = "https://demo.paykeeper.ru";   
 
 $payment_data = array (
   "pay_amount" => 42.50,
