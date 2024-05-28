@@ -77,17 +77,22 @@ const Checkout = () => {
 
   const finalStep = () => {
     if (final) {
-      // axios.post('/api/payment', {
-
-      // })
-      //   .then(function (res) {
-      //     if (res.data.status) {
-            
-      //     }
-      //   })
-      //   .catch(function (err) {
-      //     console.log(err);
-      //   });
+      axios.post('/api/payment', {
+        sum: totalPrice,
+        firstName: ,
+        lastName: ,
+        label: ,
+        email: ,
+        phone:
+      })
+        .then(function (res) {
+          if (res.data.status) {
+            location.href = res.data.result;
+          }
+        })
+        .catch(function (err) {
+          console.log(err);
+        });
     }
     setFinal(true);
   };

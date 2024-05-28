@@ -55,22 +55,22 @@ class VipZalController extends Controller
           $filteredAirports[] = $airport;
         }
       }
-    //   usort($filteredAirports, function ($a, $b) {
-    //     global $term;
-    
-    //     $posA = stripos(strtolower($a["name"]), strtolower($term));
-    //     $posB = stripos(strtolower($b["name"]), strtolower($term));
-    
-    //     if ($posA !== false && $posB !== false) {
-    //         return $posA - $posB;
-    //     } elseif ($posA !== false) {
-    //         return -1;
-    //     } elseif ($posB !== false) {
-    //         return 1;
-    //     } else {
-    //         return 0;
-    //     }
-    // });
+      //   usort($filteredAirports, function ($a, $b) {
+      //     global $term;
+
+      //     $posA = stripos(strtolower($a["name"]), strtolower($term));
+      //     $posB = stripos(strtolower($b["name"]), strtolower($term));
+
+      //     if ($posA !== false && $posB !== false) {
+      //         return $posA - $posB;
+      //     } elseif ($posA !== false) {
+      //         return -1;
+      //     } elseif ($posB !== false) {
+      //         return 1;
+      //     } else {
+      //         return 0;
+      //     }
+      // });
       $result = array(
         "status" => true,
         "result" => $filteredAirports
@@ -123,51 +123,50 @@ class VipZalController extends Controller
 
   public function payment(Request $request)
   {
-    $user = "demo";
-$password = "demo";
-$base64 = base64_encode("$user:$password"); 
-$server_paykeeper = "https://demo.paykeeper.ru";   
+    $sum = $request->input('sum');
+    $firstName = $request->input('firstName');
+    $lastName = $request->input('lastName');
+    $label = $request->input('label');
+    $email = $request->input('email');
+    $phone = $request->input('phone');
 
-$payment_data = array (
-  "pay_amount" => 42.50,
-  "clientid" => "Иванов Иван Иванович",
-  "orderid" => "Заказ № 10",
-  "client_email" => "test@example.com",
-  "service_name" => "Услуга",
-  "client_phone" => "8 (910) 123-45-67"
-  );
-  
-    $term = $request->input('term');
-    $response = Http::withToken($this->token)
+    $user = "service";
+    $password = "KWUwUf6j";
+    $base64 = base64_encode("$user:$password");
+    $server_paykeeper = "https://lead.server.paykeeper.ru";
+
+    $payment_data = array(
+      "pay_amount" => 1.00,
+      "clientid" => $firstName . ' ' . $lastName,
+      // "orderid" => "Заказ № 10",
+      "service_name" => $label,
+      "client_email" => $email,
+      "client_phone" => $phone
+    );
+
+    $response = Http::withToken($base64, 'Basic')
+      ->asForm()
       ->acceptJson()
-      ->get($this->base_url . '/query/cities', [
-        'term' => $term,
-        'limit' => 10,
-        'lang' => 'ru'
-      ]);
+      ->get($server_paykeeper . '/info/settings/token/');
     if ($response->ok()) {
       $response = $response->json();
-      $airportsDB = DB::table('airports')
-        ->where('name', 'LIKE', '%' . $term . '%')
-        ->orWhere('iata', 'LIKE', '%' . $term . '%')
-        ->get()
-        ->toArray();
-      $airportsDB = json_decode(json_encode($airportsDB), true);
-      $combinedAirports = array_merge($airportsDB, $response);
-
-      $filteredAirports = [];
-      $iataList = [];
-      foreach ($combinedAirports as $airport) {
-        if (!in_array($airport["iata"], $iataList)) {
-          $iataList[] = $airport["iata"];
-          $filteredAirports[] = $airport;
-        }
-      }
-      $result = array(
-        "status" => true,
-        "result" => $filteredAirports
-      );
-      return json_encode($result);
+      $token = $response['token'];
+      $response = Http::withToken($base64, 'Basic')
+      ->asForm()
+      ->acceptJson()
+      ->post($server_paykeeper . '/change/invoice/preview/', $payment_data);
+      if ($response->ok()) {
+        $response = $response->json();
+        $invoice_id = $response['invoice_id'];
+        $link = "$server_paykeeper/bill/$invoice_id/";
+        $result = array(
+          "status" => true,
+          "result" => $link
+        );
+        return json_encode($result);
+      } else {
+      return $this->apiError($response->json());
+      }    
     } else {
       return $this->apiError($response->json());
     }
