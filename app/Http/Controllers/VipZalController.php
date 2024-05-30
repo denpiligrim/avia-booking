@@ -123,9 +123,8 @@ class VipZalController extends Controller
 
   public function payment(Request $request)
   {
-    $sum = $request->input('sum');
+    $sum = (float) $request->input('sum');
     $firstName = $request->input('firstName');
-    $lastName = $request->input('lastName');
     $label = $request->input('label');
     $email = $request->input('email');
     $phone = $request->input('phone');
@@ -136,8 +135,9 @@ class VipZalController extends Controller
     $server_paykeeper = "https://lead.server.paykeeper.ru";
 
     $payment_data = array(
-      "pay_amount" => 1.00,
-      "clientid" => $firstName . ' ' . $lastName,
+      "pay_amount" => $sum,
+      // "pay_amount" => 1.00,
+      "clientid" => $firstName,
       // "orderid" => "Заказ № 10",
       "service_name" => $label,
       "client_email" => $email,
@@ -151,6 +151,7 @@ class VipZalController extends Controller
     if ($response->ok()) {
       $response = $response->json();
       $token = $response['token'];
+      $payment_data['token'] = $token;
       $response = Http::withToken($base64, 'Basic')
       ->asForm()
       ->acceptJson()

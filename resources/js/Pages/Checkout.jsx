@@ -79,11 +79,10 @@ const Checkout = () => {
     if (final) {
       axios.post('/api/payment', {
         sum: totalPrice,
-        firstName: ,
-        lastName: ,
-        label: ,
-        email: ,
-        phone:
+        firstName: name,
+        label: serviceInfo?.terminal?.label + ', ' + serviceInfo?.type === "departure" ? "вылет" : serviceInfo?.type === "arrival" ? "прилет" : "",
+        email: email,
+        phone: phone
       })
         .then(function (res) {
           if (res.data.status) {
