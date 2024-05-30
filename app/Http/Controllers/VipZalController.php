@@ -129,10 +129,10 @@ class VipZalController extends Controller
     $email = $request->input('email');
     $phone = $request->input('phone');
 
-    $user = "service";
-    $password = "KWUwUf6j";
+    $user = env('PAYKEEPER_LOGIN', '');
+    $password = env('PAYKEEPER_PASSWORD', '');
     $base64 = base64_encode("$user:$password");
-    $server_paykeeper = "https://lead.server.paykeeper.ru";
+    $server_paykeeper = env('PAYKEEPER_SERVER', '');
 
     $payment_data = array(
       "pay_amount" => $sum,

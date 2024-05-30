@@ -82,7 +82,7 @@ const Checkout = () => {
         firstName: name,
         label: serviceInfo?.terminal?.label + ', ' + serviceInfo?.type === "departure" ? "вылет" : serviceInfo?.type === "arrival" ? "прилет" : "",
         email: email,
-        phone: phone
+        phone: phone    
       })
         .then(function (res) {
           if (res.data.status) {
