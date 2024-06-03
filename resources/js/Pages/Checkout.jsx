@@ -28,6 +28,7 @@ const Checkout = () => {
   const [additional, setAdditional] = useState([]);
   const [departureCity, setDepartureCity] = useState('');
   const [arrivalCity, setArrivalCity] = useState('');
+  const [otherIata, setOtherIata] = useState('');
   const [expanded, setExpanded] = useState(false);
   const [checked, setChecked] = useState([]);
   const [guests, setGuests] = useState([]);
@@ -80,9 +81,22 @@ const Checkout = () => {
       axios.post('/api/payment', {
         sum: totalPrice,
         firstName: name,
-        label: serviceInfo?.terminal?.label + ', ' + serviceInfo?.type === "departure" ? "вылет" : serviceInfo?.type === "arrival" ? "прилет" : "",
+        label: serviceInfo?.terminal?.label + ', ' + (serviceInfo?.type === "departure" ? "вылет" : serviceInfo?.type === "arrival" ? "прилет" : ""),
         email: email,
-        phone: phone    
+        phone: phone,
+        flight: {
+          flightNumber: flight,
+          flightTime: date.format('YYYY-MM-DD') + 'T' + time.format('HH:mm:ss'),
+          origin: serviceInfo.type === "departure" ? serviceInfo.terminal.airport.iata : otherIata,
+          destination: serviceInfo.type === "arrival" ? serviceInfo.terminal.airport.iata : otherIata
+        },
+        serviceId: serviceInfo.id,
+        partnerClientComment: comment,
+        passengers: passengers,
+        attendants: guests,
+        cars: cars,
+        additionalServices: additional,
+
       })
         .then(function (res) {
           if (res.data.status) {
@@ -354,12 +368,12 @@ const Checkout = () => {
                   {serviceInfo.type === "departure" ? (
                     <TextField disabled={serviceInfo.type === "departure" ? true : false} value={departureCity} onChange={changeDepartureCity} placeholder="Город вылета" variant="outlined" />
                   ) : (
-                    <CitiesSearch flightType={serviceInfo.flightType} val={departureCity} changeVal={setDepartureCity} />
+                    <CitiesSearch flightType={serviceInfo.flightType} val={departureCity} changeVal={setDepartureCity} changeIata={setOtherIata} />
                   )}
                   {serviceInfo.type === "arrival" ? (
                     <TextField disabled={serviceInfo.type === "arrival" ? true : false} value={arrivalCity} onChange={changeArrivalCity} placeholder="Город прилета" variant="outlined" />
                   ) : (
-                    <CitiesSearch flightType={serviceInfo.flightType} val={arrivalCity} changeVal={setArrivalCity} />
+                    <CitiesSearch flightType={serviceInfo.flightType} val={arrivalCity} changeVal={setArrivalCity} changeIata={setOtherIata} />
                   )}
                 </Stack>
                 <Typography variant="h6" component="p" sx={{ color: 'white', mt: 3 }} gutterBottom>Пассажиры</Typography>
