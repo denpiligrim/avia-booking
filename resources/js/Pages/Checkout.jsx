@@ -15,8 +15,13 @@ import axios from 'axios';
 import dayjs from 'dayjs';
 import 'dayjs/locale/ru';
 import CitiesSearch from '../Components/CitiesSearch';
+import formValidator from '../helpers/formValidator';
+import appState from '../store/appState';
+import { observer } from 'mobx-react-lite';
 
-const Checkout = () => {
+const Checkout = observer(() => {
+
+  const [store] = useState(appState);
 
   const [activeStep, setActiveStep] = useState(0);
   const [totalPrice, setTotalPrice] = useState(0);
@@ -62,9 +67,53 @@ const Checkout = () => {
     }
   ]);
 
+  const notify = (severity, text) => {
+    store.openSnackbar(severity, text);;
+}
+
   const nextStep = () => {
     let currentIndex = activeStep;
     let newArr = stepState;
+
+    if (currentIndex === 0) {
+      const arr = [
+        {
+          name: 'passengers',
+          value: passengers
+        },
+        {
+          name: 'flight',
+          value: flight
+        },
+        {
+          name: 'date',
+          value: date
+        },
+        {
+          name: 'time',
+          value: time
+        },
+        {
+          name: 'departure',
+          value: arrivalCity
+        },
+        {
+          name: 'arrival',
+          value: departureCity
+        }
+      ];
+      const validation = formValidator(arr);
+      console.log(validation);
+      const isValid = validation.isValid;
+      if (!isValid) {
+        if (validation.messages.length < 2) {
+          notify('error', `Заполните правильно поле ${validation.messages[0]}!`);
+      } else {
+          notify('error', `Заполните правильно поля:<br> <ul style="margin: 0; padding-left: 15px;">${validation.messages.map(el => "<li>" + el + "</li>").join('')}</ul>`);
+      }
+      return;
+      }
+    }
     newArr[currentIndex].completed = true;
     setStepState(newArr);
     setActiveStep(++currentIndex);
@@ -359,7 +408,10 @@ const Checkout = () => {
                     <TimeField
                       value={time}
                       ampm={false}
-                      onChange={(newValue) => setTime(newValue)}
+                      onChange={(newValue) => {
+                        setTime(newValue)
+                        console.log(newValue);
+                      }}
                     />
                   </DemoContainer>
                 </LocalizationProvider>
@@ -674,6 +726,5 @@ const Checkout = () => {
       </Grid>
     </Grid>
   )
-}
-
+});
 export default Checkout;

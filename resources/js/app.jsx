@@ -9,7 +9,7 @@ import Main from './Pages/Main';
 import Error404 from './Pages/Error404';
 import Header from './Components/Header';
 import Footer from './Components/Footer';
-// import Notification from './Components/Notification';
+import Notification from './Components/Notification';
 // import ScrollToTop from './Components/ScrollToTop';
 // import ToTopBtn from './Components/ToTopBtn';
 import Privacy from './Pages/Privacy';
@@ -76,7 +76,7 @@ ReactDOM.createRoot(document.getElementById('app')).render(
         </Routes>
       </Grid>
       <Footer />
-      {/* <Notification /> */}
+      <Notification />
       {/* <ToTopBtn /> */}
     </ThemeProvider>
   </BrowserRouter>
