@@ -3,55 +3,51 @@ const formValidator = (form) => {
   const messages = [];
 
   form.forEach(el => {
-    console.log(el.name);
-    switch(el.name) {
-      case "date":
-        if (el.value === null) {
-          console.log(el.value.$d);
+    if (el.name === "date") {
+      if (!el.value) {
+        isValid = false;
+        messages.push('Дата рейса');
+      }
+    } else if (el.name === "time") {
+      if (!el.value) {
+        isValid = false;
+        messages.push('Время рейса');
+      }
+    } else if (el.name === "flight") {
+      if (!el.value) {
+        isValid = false;
+        messages.push('Номер рейса');
+      }
+    } else if (el.name === "arrival") {
+      if (el.value.length === 0) {
+        console.log(el.value);
+        isValid = false;
+        messages.push('Пункт отправления');
+      }
+    } else if (el.name === "departure") {
+      if (el.value.length === 0) {
+        console.log(el.value);
+        isValid = false;
+        messages.push('Пункт назначения');
+      }
+    } else if (el.name === "passengers") {
+      for (let i = 0; i < el.value.length; i++) {
+        const elem = el.value[i];
+        if (!elem.firstName) {
           isValid = false;
-          messages.push('Дата рейса');
+          messages.push('Имя');
         }
-      case "time":
-        if (el.value === null) {
+        if (!elem.lastName) {
           isValid = false;
-          messages.push('Время рейса');
+          messages.push('Фамилия');
         }
-      case "flight":
-        if (!el.value) {
-          isValid = false;
-          messages.push('Номер рейса');
-        }
-      case "arrival":
-        if (el.value.length === 0) {
-          console.log(el.value);
-          isValid = false;
-          messages.push('Пункт отправления');
-        }
-      case "departure":
-        if (el.value.length === 0) {
-          console.log(el.value);
-          isValid = false;
-          messages.push('Пункт назначения');
-        }
-      case "passengers":
-        el.value.forEach(el => {
-          if (!el.firstName) {
+        if (elem.passengerCategory !== 2) {
+          if (elem.birthDate === null) {
             isValid = false;
-            messages.push('Имя');
+            messages.push('Дата рождения');
           }
-          if (!el.lastName) {
-            isValid = false;
-            messages.push('Фамилия');
-          }
-          if (el.passengerCategory !== 2) {
-            if (el.birthDate === null) {
-              isValid = false;
-              messages.push('Дата рождения');
-            }
-          }
-        });
-      default:
-        break;
+        }
+      }
     }
   });
 

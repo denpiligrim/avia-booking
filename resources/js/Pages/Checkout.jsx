@@ -522,6 +522,18 @@ const Checkout = observer(() => {
                                   key={i}
                                   secondaryAction={
                                     <>
+                                    {checked.indexOf(el) !== -1 && (
+                                      <Box>
+                                      <TextField
+                                      sx={{
+                                        width: 20,
+                                        height: 20
+                                      }}
+                                      helperText="Кол-во часов"
+                                      id="demo-helper-text-misaligned"
+                                    />
+                                    </Box>
+                                  )}
                                       {el.price.value.toString().replace(/(\d)(?=(\d{3})+(\D|$))/g, '$1 ') + ' ₽'}
                                     </>
                                   }
@@ -538,7 +550,7 @@ const Checkout = observer(() => {
                                       />
                                     </ListItemIcon>
                                     <ListItemText id={labelId} primary={el.name} />
-                                  </ListItemButton>
+                                  </ListItemButton>                                  
                                 </ListItem>
                               );
                             })}
