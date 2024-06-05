@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react'
-import { Grid, Stepper, Step, StepLabel, Button, Box, Typography, TextField, Stack, Divider, ToggleButtonGroup, ToggleButton, IconButton, Accordion, AccordionSummary, AccordionDetails, List, ListItem, ListItemButton, ListItemIcon, ListItemText, Checkbox, FormControlLabel } from '@mui/material';
+import { Grid, Stepper, Step, StepLabel, Button, Box, Typography, TextField, Stack, Divider, ToggleButtonGroup, ToggleButton, IconButton, Accordion, AccordionSummary, AccordionDetails, List, ListItem, ListItemButton, ListItemIcon, ListItemText, Checkbox, FormControlLabel, FormControl, Select, MenuItem } from '@mui/material';
 import TextareaAutosize from "react-autosize-textarea";
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import AddIcon from '@mui/icons-material/Add';
@@ -31,6 +31,7 @@ const Checkout = observer(() => {
   const [time, setTime] = useState(dayjs());
   const [flight, setFlight] = useState('');
   const [additional, setAdditional] = useState([]);
+  const [additionalHour, setAdditionaltHour] = useState([]);
   const [departureCity, setDepartureCity] = useState('');
   const [arrivalCity, setArrivalCity] = useState('');
   const [otherIata, setOtherIata] = useState('');
@@ -66,6 +67,31 @@ const Checkout = observer(() => {
       completed: false
     }
   ]);
+
+  const changeAdditionalHour = (e, i) => {
+    const newArr = [...additionalHour];
+    newArr[i] = e.target.value;
+    setAdditionaltHour(newArr);
+  }
+
+  const calculateMinMaxDatesForUnder2 = () => {
+    const currentDate = dayjs();
+    return {
+      minDateUnder2: currentDate.subtract(2, 'year'),
+      maxDateUnder2: currentDate
+    };
+  };
+
+  const calculateMinMaxDatesForBetween2And12 = () => {
+    const currentDate = dayjs();
+    return {
+      minDateBetween2And12: currentDate.subtract(12, 'year'),
+      maxDateBetween2And12: currentDate.subtract(2, 'year')
+    };
+  };
+
+  const { minDateUnder2, maxDateUnder2 } = calculateMinMaxDatesForUnder2();
+  const { minDateBetween2And12, maxDateBetween2And12 } = calculateMinMaxDatesForBetween2And12();
 
   const notify = (severity, text) => {
     store.openSnackbar(severity, text);;
@@ -107,9 +133,9 @@ const Checkout = observer(() => {
       const isValid = validation.isValid;
       if (!isValid) {
         if (validation.messages.length < 2) {
-          notify('error', `Заполните правильно поле ${validation.messages[0]}!`);
+          notify('error', `Заполните корректно поле ${validation.messages[0]}!`);
       } else {
-          notify('error', `Заполните правильно поля:<br> <ul style="margin: 0; padding-left: 15px;">${validation.messages.map(el => "<li>" + el + "</li>").join('')}</ul>`);
+          notify('error', `Заполните корректно поля:<br> <ul style="margin: 0; padding-left: 15px;">${validation.messages.map(el => "<li>" + el + "</li>").join('')}</ul>`);
       }
       return;
       }
@@ -402,16 +428,13 @@ const Checkout = observer(() => {
                 <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale='ru'>
                   <DemoContainer components={['DatePicker']}>
                     <DatePicker
-                      value={date}
-                      onChange={(newValue) => setDate(newValue)}
+                      value={date}                                          
+                      onChange={(newValue) => setDate(newValue ? newValue : dayjs())}
                     />
                     <TimeField
                       value={time}
                       ampm={false}
-                      onChange={(newValue) => {
-                        setTime(newValue)
-                        console.log(newValue);
-                      }}
+                      onChange={(newValue) => setTime(newValue ? newValue : dayjs())}
                     />
                   </DemoContainer>
                 </LocalizationProvider>
@@ -462,8 +485,10 @@ const Checkout = observer(() => {
                       <>
                         <Typography variant="body2" component="p" sx={{ color: 'white' }}>Дата рождения</Typography>
                         <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale='ru'>
-                          <DemoContainer components={['DatePicker']}>
+                          <DemoContainer components={['DatePicker']}>                          
                             <DatePicker
+                            minDate={el.passengerCategory === 0 ? minDateUnder2 : minDateBetween2And12}
+                            maxDate={el.passengerCategory === 0 ? maxDateUnder2 : maxDateBetween2And12}
                               value={el.birthDate}
                               onChange={(newValue) => changePassDate(i, newValue)}
                             />
@@ -523,16 +548,20 @@ const Checkout = observer(() => {
                                   secondaryAction={
                                     <>
                                     {checked.indexOf(el) !== -1 && (
-                                      <Box>
-                                      <TextField
-                                      sx={{
-                                        width: 20,
-                                        height: 20
-                                      }}
-                                      helperText="Кол-во часов"
-                                      id="demo-helper-text-misaligned"
-                                    />
-                                    </Box>
+                                      <FormControl sx={{ m: 1, minWidth: 120 }} size="small">
+                                      <Select
+                                        labelId="demo-select-small-label"
+                                        id="demo-select-small"
+                                        value={additionalHour[checked.indexOf(el)]}
+                                        onChange={(e) => changeAdditionalHour(e, checked.indexOf(el))}
+                                      >    
+                                        <MenuItem value={1}>1 час</MenuItem>
+                                        <MenuItem value={2}>2 часа</MenuItem>
+                                        <MenuItem value={3}>3 часа</MenuItem>
+                                        <MenuItem value={4}>4 часа</MenuItem>
+                                        <MenuItem value={5}>5 часов</MenuItem>
+                                      </Select>
+                                    </FormControl>
                                   )}
                                       {el.price.value.toString().replace(/(\d)(?=(\d{3})+(\D|$))/g, '$1 ') + ' ₽'}
                                     </>
