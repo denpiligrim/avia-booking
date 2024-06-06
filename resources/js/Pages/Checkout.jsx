@@ -545,10 +545,15 @@ const Checkout = observer(() => {
                               return (
                                 <ListItem
                                   key={i}
+                                  sx={{
+                                    "& .MuiListItemSecondaryAction-root": {
+                                      display: "flex"
+                                    }
+                                  }}
                                   secondaryAction={
                                     <>
                                     {checked.indexOf(el) !== -1 && (
-                                      <FormControl sx={{ m: 1, minWidth: 120 }} size="small">
+                                      <FormControl sx={{ mr: 1, minWidth: 120 }} size="small">
                                       <Select
                                         labelId="demo-select-small-label"
                                         id="demo-select-small"
@@ -563,7 +568,7 @@ const Checkout = observer(() => {
                                       </Select>
                                     </FormControl>
                                   )}
-                                      {el.price.value.toString().replace(/(\d)(?=(\d{3})+(\D|$))/g, '$1 ') + ' ₽'}
+                                      <Typography variant="body1" component="p" sx={{display: 'flex', alignItems: 'center'}}>{el.price.value.toString().replace(/(\d)(?=(\d{3})+(\D|$))/g, '$1 ') + ' ₽/час'}</Typography>
                                     </>
                                   }
                                   disablePadding
