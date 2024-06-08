@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react'
 import { Grid, Stepper, Step, StepLabel, Button, Box, Typography, TextField, Stack, Divider, ToggleButtonGroup, ToggleButton, IconButton, Accordion, AccordionSummary, AccordionDetails, List, ListItem, ListItemButton, ListItemIcon, ListItemText, Checkbox, FormControlLabel, FormControl, Select, MenuItem } from '@mui/material';
+import ReactInputMask from "react-input-mask";
 import TextareaAutosize from "react-autosize-textarea";
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import AddIcon from '@mui/icons-material/Add';
@@ -39,7 +40,6 @@ const Checkout = observer(() => {
   const [checked, setChecked] = useState([]);
   const [guests, setGuests] = useState([]);
   const [cars, setCars] = useState([]);
-  const [person, setPerson] = useState("pp");
   const [name, setClientName] = useState("");
   const [phone, setClientPhone] = useState("");
   const [email, setClientEmail] = useState("");
@@ -70,7 +70,7 @@ const Checkout = observer(() => {
 
   const changeAdditionalHour = (e, i) => {
     const newArr = [...additionalHour];
-    newArr[i] = e.target.value;
+    newArr[i] = +e.target.value;
     setAdditionaltHour(newArr);
   }
 
@@ -95,14 +95,15 @@ const Checkout = observer(() => {
 
   const notify = (severity, text) => {
     store.openSnackbar(severity, text);;
-}
+  }
 
   const nextStep = () => {
     let currentIndex = activeStep;
     let newArr = stepState;
+    let arr = [];
 
     if (currentIndex === 0) {
-      const arr = [
+      arr = [
         {
           name: 'passengers',
           value: passengers
@@ -128,17 +129,43 @@ const Checkout = observer(() => {
           value: departureCity
         }
       ];
-      const validation = formValidator(arr);
-      console.log(validation);
-      const isValid = validation.isValid;
-      if (!isValid) {
-        if (validation.messages.length < 2) {
-          notify('error', `Заполните корректно поле ${validation.messages[0]}!`);
+    } else if (currentIndex === 1) {
+      arr = [
+        {
+          name: 'guests',
+          value: guests
+        },
+        {
+          name: 'cars',
+          value: cars
+        }
+      ];
+    } else if (currentIndex === 2) {
+      arr = [
+        {
+          name: 'name',
+          value: name
+        },
+        {
+          name: 'phone',
+          value: phone
+        },
+        {
+          name: 'email',
+          value: email
+        }
+      ];
+    }
+    const validation = formValidator(arr);
+    console.log(validation);
+    const isValid = validation.isValid;
+    if (!isValid) {
+      if (validation.messages.length < 2) {
+        notify('error', `Заполните корректно поле ${validation.messages[0]}!`);
       } else {
-          notify('error', `Заполните корректно поля:<br> <ul style="margin: 0; padding-left: 15px;">${validation.messages.map(el => "<li>" + el + "</li>").join('')}</ul>`);
+        notify('error', `Заполните корректно поля:<br> <ul style="margin: 0; padding-left: 15px;">${validation.messages.map(el => "<li>" + el + "</li>").join('')}</ul>`);
       }
       return;
-      }
     }
     newArr[currentIndex].completed = true;
     setStepState(newArr);
@@ -301,10 +328,6 @@ const Checkout = observer(() => {
     setArrivalCity(e.target.value);
   }
 
-  const changePerson = (val) => {
-    setPerson(val);
-  }
-
   const changeClientName = (val) => {
     let value = val.trim();
     value = value.slice(0, 1).toUpperCase() + value.slice(1);
@@ -332,6 +355,7 @@ const Checkout = observer(() => {
   const handleToggle = (value, index) => () => {
     const currentIndex = checked.indexOf(value);
     const newChecked = [...checked];
+    const newHour = [...additionalHour];
 
     if (currentIndex === -1) {
       let indexRemove = null;
@@ -341,13 +365,19 @@ const Checkout = observer(() => {
           indexRemove = i;
         }
       });
-      if (indexRemove !== -1 && indexRemove !== null) newChecked.splice(indexRemove, 1);
+      if (indexRemove !== -1 && indexRemove !== null) {
+        newChecked.splice(indexRemove, 1);
+        newHour.splice(indexRemove, 1);
+      }
       newChecked.push(value);
+      newHour.push(1);
     } else {
       newChecked.splice(currentIndex, 1);
+      newHour.splice(currentIndex, 1);
     }
 
     setChecked(newChecked);
+    setAdditionaltHour(newHour);
   };
 
   useEffect(() => {
@@ -389,12 +419,12 @@ const Checkout = observer(() => {
       sum += localServiceInfo.priceGroup.passengerCategories[el.passengerCategory].price.value;
     });
     if (checked.length > 0) {
-      checked.forEach(el => {
-        sum += el.price.value;
+      checked.forEach((el, i) => {
+        sum += el.price.value * additionalHour[i];
       });
     }
     setTotalPrice(sum);
-  }, [passengers, checked])
+  }, [passengers, checked, additionalHour])
 
   return (
     <Grid item xs={12}>
@@ -428,7 +458,7 @@ const Checkout = observer(() => {
                 <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale='ru'>
                   <DemoContainer components={['DatePicker']}>
                     <DatePicker
-                      value={date}                                          
+                      value={date}
                       onChange={(newValue) => setDate(newValue ? newValue : dayjs())}
                     />
                     <TimeField
@@ -485,10 +515,10 @@ const Checkout = observer(() => {
                       <>
                         <Typography variant="body2" component="p" sx={{ color: 'white' }}>Дата рождения</Typography>
                         <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale='ru'>
-                          <DemoContainer components={['DatePicker']}>                          
+                          <DemoContainer components={['DatePicker']}>
                             <DatePicker
-                            minDate={el.passengerCategory === 0 ? minDateUnder2 : minDateBetween2And12}
-                            maxDate={el.passengerCategory === 0 ? maxDateUnder2 : maxDateBetween2And12}
+                              minDate={el.passengerCategory === 0 ? minDateUnder2 : minDateBetween2And12}
+                              maxDate={el.passengerCategory === 0 ? maxDateUnder2 : maxDateBetween2And12}
                               value={el.birthDate}
                               onChange={(newValue) => changePassDate(i, newValue)}
                             />
@@ -552,23 +582,23 @@ const Checkout = observer(() => {
                                   }}
                                   secondaryAction={
                                     <>
-                                    {checked.indexOf(el) !== -1 && (
-                                      <FormControl sx={{ mr: 1, minWidth: 120 }} size="small">
-                                      <Select
-                                        labelId="demo-select-small-label"
-                                        id="demo-select-small"
-                                        value={additionalHour[checked.indexOf(el)]}
-                                        onChange={(e) => changeAdditionalHour(e, checked.indexOf(el))}
-                                      >    
-                                        <MenuItem value={1}>1 час</MenuItem>
-                                        <MenuItem value={2}>2 часа</MenuItem>
-                                        <MenuItem value={3}>3 часа</MenuItem>
-                                        <MenuItem value={4}>4 часа</MenuItem>
-                                        <MenuItem value={5}>5 часов</MenuItem>
-                                      </Select>
-                                    </FormControl>
-                                  )}
-                                      <Typography variant="body1" component="p" sx={{display: 'flex', alignItems: 'center'}}>{el.price.value.toString().replace(/(\d)(?=(\d{3})+(\D|$))/g, '$1 ') + ' ₽/час'}</Typography>
+                                      {checked.indexOf(el) !== -1 && (
+                                        <FormControl sx={{ mr: 1, minWidth: 120 }} size="small">
+                                          <Select
+                                            labelId="demo-select-small-label"
+                                            id="demo-select-small"
+                                            value={additionalHour[checked.indexOf(el)]}
+                                            onChange={(e) => changeAdditionalHour(e, checked.indexOf(el))}
+                                          >
+                                            <MenuItem value={1}>1 час</MenuItem>
+                                            <MenuItem value={2}>2 часа</MenuItem>
+                                            <MenuItem value={3}>3 часа</MenuItem>
+                                            <MenuItem value={4}>4 часа</MenuItem>
+                                            <MenuItem value={5}>5 часов</MenuItem>
+                                          </Select>
+                                        </FormControl>
+                                      )}
+                                      <Typography variant="body1" component="p" sx={{ display: 'flex', alignItems: 'center' }}>{el.price.value.toString().replace(/(\d)(?=(\d{3})+(\D|$))/g, '$1 ') + ' ₽/час'}</Typography>
                                     </>
                                   }
                                   disablePadding
@@ -584,7 +614,7 @@ const Checkout = observer(() => {
                                       />
                                     </ListItemIcon>
                                     <ListItemText id={labelId} primary={el.name} />
-                                  </ListItemButton>                                  
+                                  </ListItemButton>
                                 </ListItem>
                               );
                             })}
@@ -662,29 +692,20 @@ const Checkout = observer(() => {
                 {!final ? (
                   <>
                     <Typography variant="h6" component="p" sx={{ color: 'white', mt: 3 }} gutterBottom>Контактная информация</Typography>
-                    <ToggleButtonGroup
-                      color="primary"
-                      value={person}
-                      exclusive
-                      onChange={(e, val) => changePerson(val)}
-                      aria-label="Platform"
-                      sx={{
-                        mt: 1,
-                        "& .MuiButtonBase-root:not(.Mui-selected)": {
-                          color: 'rgba(255, 255, 255, 0.54)'
-                        }
-                      }}
-                    >
-                      <ToggleButton value="pp">Физическое лицо</ToggleButton>
-                      <ToggleButton value="le">Юридическое лицо</ToggleButton>
-                    </ToggleButtonGroup>
-                    {person === "le" && (
-                      <>
-                        <Box></Box>
-                      </>
-                    )}
                     <Box><TextField value={name} placeholder="Имя" variant="outlined" onChange={(e) => changeClientName(e.target.value)} /></Box>
-                    <Box><TextField value={phone} placeholder="Телефон" variant="outlined" onChange={(e) => changeClientPhone(e.target.value)} /></Box>
+                    <Box>
+                      <ReactInputMask mask="+7 (999) 999-99-99" value={phone} onChange={(event) => changeClientPhone(event.target.value)}>
+                        <TextField
+                          label="Телефон"
+                          variant="outlined"
+                          required
+                          sx={{
+                            width: '100%',
+                            maxWidth: '250px'
+                          }}
+                        />
+                      </ReactInputMask>
+                    </Box>
                     <Box><TextField value={email} placeholder="Email" variant="outlined" onChange={(e) => changeClientEmail(e.target.value)} /></Box>
                     <Typography variant="h6" component="p" sx={{ color: 'white', mt: 3 }} gutterBottom>Комментарий</Typography>
                     <TextareaAutosize

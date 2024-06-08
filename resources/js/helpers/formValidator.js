@@ -48,6 +48,47 @@ const formValidator = (form) => {
           }
         }
       }
+    } else if (el.name === "guests" && el.name.length > 0) {
+      for (let i = 0; i < el.value.length; i++) {
+        const elem = el.value[i];
+        if (!elem.firstName) {
+          isValid = false;
+          messages.push('Имя');
+        }
+        if (!elem.lastName) {
+          isValid = false;
+          messages.push('Фамилия');
+        }
+      }
+    } else if (el.name === "cars" && el.name.length > 0) {
+      for (let i = 0; i < el.value.length; i++) {
+        const elem = el.value[i];
+        if (!elem.later) {
+          if (!elem.number) {
+            isValid = false;
+            messages.push('Номер автомобиля');
+          }
+          if (!elem.model) {
+            isValid = false;
+            messages.push('Марка автомобиля');
+          }
+        }
+      }
+    } else if (el.name === "name") {
+      if (el.value.length === 0) {
+        isValid = false;
+        messages.push('Имя');
+      }
+    } else if (el.name === "phone") {
+      if (!el.value || el.value.replace(/[^\d+]/g, "").length !== 12) {
+        isValid = false;
+        messages.push('Телефон');
+      }
+    } else if (el.name === "email") {
+      if (!el.value || !el.value.includes('@') || !el.value.includes('.')) {
+        isValid = false;
+        messages.push('Email');
+      }
     }
   });
 
