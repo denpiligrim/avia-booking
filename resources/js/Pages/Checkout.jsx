@@ -17,6 +17,7 @@ import dayjs from 'dayjs';
 import 'dayjs/locale/ru';
 import CitiesSearch from '../Components/CitiesSearch';
 import formValidator from '../helpers/formValidator';
+import getHourWordForm from '../helpers/getHourWordForm';
 import appState from '../store/appState';
 import { observer } from 'mobx-react-lite';
 
@@ -140,24 +141,12 @@ const Checkout = observer(() => {
           value: cars
         }
       ];
-    } else if (currentIndex === 2) {
-      arr = [
-        {
-          name: 'name',
-          value: name
-        },
-        {
-          name: 'phone',
-          value: phone
-        },
-        {
-          name: 'email',
-          value: email
-        }
-      ];
+      if (!name) {
+        const nameInArr = passengers.find(item => item.passengerCategory === 2).firstName;
+        setClientName(nameInArr);
+      }
     }
     const validation = formValidator(arr);
-    console.log(validation);
     const isValid = validation.isValid;
     if (!isValid) {
       if (validation.messages.length < 2) {
@@ -208,6 +197,33 @@ const Checkout = observer(() => {
         .catch(function (err) {
           console.log(err);
         });
+    } else {
+      if (activeStep === 2) {
+        const arr = [
+          {
+            name: 'name',
+            value: name
+          },
+          {
+            name: 'phone',
+            value: phone
+          },
+          {
+            name: 'email',
+            value: email
+          }
+        ];
+        const validation = formValidator(arr);
+        const isValid = validation.isValid;
+        if (!isValid) {
+          if (validation.messages.length < 2) {
+            notify('error', `Заполните корректно поле ${validation.messages[0]}!`);
+          } else {
+            notify('error', `Заполните корректно поля:<br> <ul style="margin: 0; padding-left: 15px;">${validation.messages.map(el => "<li>" + el + "</li>").join('')}</ul>`);
+          }
+          return;
+        }
+      }
     }
     setFinal(true);
   };
@@ -403,7 +419,6 @@ const Checkout = observer(() => {
             }, {});
             const entries = Object.entries(groupedObjects);
             setAdditional(entries);
-            console.log(entries);
           }
         })
         .catch(function (err) {
@@ -459,6 +474,7 @@ const Checkout = observer(() => {
                   <DemoContainer components={['DatePicker']}>
                     <DatePicker
                       value={date}
+                      minDate={dayjs()}
                       onChange={(newValue) => setDate(newValue ? newValue : dayjs())}
                     />
                     <TimeField
@@ -696,7 +712,7 @@ const Checkout = observer(() => {
                     <Box>
                       <ReactInputMask mask="+7 (999) 999-99-99" value={phone} onChange={(event) => changeClientPhone(event.target.value)}>
                         <TextField
-                          label="Телефон"
+                          placeholder="Телефон"
                           variant="outlined"
                           required
                           sx={{
@@ -745,9 +761,9 @@ const Checkout = observer(() => {
                         {additional.map((el, i) => (
                           <React.Fragment key={'label' + i}>
                             <Typography variant="body1" component="p">{el[1].filter(item => checked.includes(item)).length > 0 ? el[0] : ''}</Typography>
-                            {el[1].filter(item => checked.includes(item)).map((el, index) => (
+                            {el[1].filter((item, i) => checked.includes(item)).map((el, index) => (
                               <React.Fragment key={'label2' + index}>
-                                <Typography variant="body2" component="p">{el.name + ' ' + el.price.value.toString().replace(/(\d)(?=(\d{3})+(\D|$))/g, '$1 ') + ' ₽'}</Typography>
+                                <Typography variant="body2" component="p">{el.name + ' ' + el.price.value.toString().replace(/(\d)(?=(\d{3})+(\D|$))/g, '$1 ') + ' ₽/час (' + getHourWordForm(additionalHour[i]) + ')'}</Typography>
                               </React.Fragment>
                             ))}
                           </React.Fragment>
@@ -772,9 +788,10 @@ const Checkout = observer(() => {
                         )}
                       </React.Fragment>
                     )) : <Typography variant="body2" component="p">Нет</Typography>}
-                    <Typography variant="body2" component="p"></Typography>
-                    <Typography variant="body1" component="p"></Typography>
-                    <Typography variant="body2" component="p"></Typography>
+                    <Typography variant="h6" component="p">Контактные данные</Typography>
+                    <Typography variant="body2" component="p">{name}</Typography>
+                    <Typography variant="body2" component="p">{phone}</Typography>
+                    <Typography variant="body2" component="p">{email}</Typography>
                   </Box>
                 )}
               </>

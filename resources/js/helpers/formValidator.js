@@ -20,17 +20,20 @@ const formValidator = (form) => {
       }
     } else if (el.name === "arrival") {
       if (el.value.length === 0) {
-        console.log(el.value);
         isValid = false;
         messages.push('Пункт отправления');
       }
     } else if (el.name === "departure") {
       if (el.value.length === 0) {
-        console.log(el.value);
         isValid = false;
         messages.push('Пункт назначения');
       }
     } else if (el.name === "passengers") {
+      const hasAdult = el.value.find(item => item.passengerCategory === 2);
+      if (!hasAdult) {
+        isValid = false;
+        messages.push('Добавьте хотя бы 1 взрослого пассажира');
+      }
       for (let i = 0; i < el.value.length; i++) {
         const elem = el.value[i];
         if (!elem.firstName) {
