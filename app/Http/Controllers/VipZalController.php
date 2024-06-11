@@ -134,6 +134,18 @@ class VipZalController extends Controller
     $base64 = base64_encode("$user:$password");
     $server_paykeeper = env('PAYKEEPER_SERVER', '');
 
+    $all = [
+      'name' => $firstName,
+      'phone' => $phone,
+      'email' => $email,
+      'order_data' => json_encode($request->all())
+  ];
+
+    $dbInsert = DB::table('orders_leadaero')->insert($all);
+
+    $mc = new MailController();
+    $mc->index($all);
+
     $payment_data = array(
       "pay_amount" => $sum,
       // "pay_amount" => 1.00,
@@ -144,33 +156,33 @@ class VipZalController extends Controller
       "client_phone" => $phone
     );
 
-    $response = Http::withToken($base64, 'Basic')
-      ->asForm()
-      ->acceptJson()
-      ->get($server_paykeeper . '/info/settings/token/');
-    if ($response->ok()) {
-      $response = $response->json();
-      $token = $response['token'];
-      $payment_data['token'] = $token;
-      $response = Http::withToken($base64, 'Basic')
-      ->asForm()
-      ->acceptJson()
-      ->post($server_paykeeper . '/change/invoice/preview/', $payment_data);
-      if ($response->ok()) {
-        $response = $response->json();
-        $invoice_id = $response['invoice_id'];
-        $link = "$server_paykeeper/bill/$invoice_id/";
-        $result = array(
-          "status" => true,
-          "result" => $link
-        );
-        return json_encode($result);
-      } else {
-      return $this->apiError($response->json());
-      }    
-    } else {
-      return $this->apiError($response->json());
-    }
+    // $response = Http::withToken($base64, 'Basic')
+    //   ->asForm()
+    //   ->acceptJson()
+    //   ->get($server_paykeeper . '/info/settings/token/');
+    // if ($response->ok()) {
+    //   $response = $response->json();
+    //   $token = $response['token'];
+    //   $payment_data['token'] = $token;
+    //   $response = Http::withToken($base64, 'Basic')
+    //   ->asForm()
+    //   ->acceptJson()
+    //   ->post($server_paykeeper . '/change/invoice/preview/', $payment_data);
+    //   if ($response->ok()) {
+    //     $response = $response->json();
+    //     $invoice_id = $response['invoice_id'];
+    //     $link = "$server_paykeeper/bill/$invoice_id/";
+    //     $result = array(
+    //       "status" => true,
+    //       "result" => $link
+    //     );
+    //     return json_encode($result);
+    //   } else {
+    //   return $this->apiError($response->json());
+    //   }    
+    // } else {
+    //   return $this->apiError($response->json());
+    // }
   }
 
   // public function airports()
