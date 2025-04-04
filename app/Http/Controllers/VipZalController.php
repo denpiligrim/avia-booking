@@ -141,7 +141,7 @@ class VipZalController extends Controller
       'order_data' => json_encode($request->all())
   ];
 
-    $dbInsert = DB::table('orders_leadaero')->insert($all);
+    $dbInsert = DB::table('orders_booking')->insert($all);
 
     $mc = new MailController();
     $mc->index($all);
